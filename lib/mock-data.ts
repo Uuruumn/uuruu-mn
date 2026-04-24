@@ -3,6 +3,11 @@ import { Listing } from '@/lib/types';
 export const featuredListings: Listing[] = [
   {
     id: '1',
+    listing_type: 'sale',
+    poster_type: 'individual',
+    door_type: null,
+    window_type: null,
+    has_certificate: true,
     title: 'River Garden-д 3 өрөө орон сууц',
     property_type: 'Орон сууц',
     location: 'Хан-Уул, Улаанбаатар',
@@ -21,6 +26,11 @@ export const featuredListings: Listing[] = [
   },
   {
     id: '2',
+    listing_type: 'sale',
+    poster_type: 'individual',
+    door_type: null,
+    window_type: null,
+    has_certificate: true,
     title: 'Шинэ Яармагт 2 өрөө байр',
     property_type: 'Орон сууц',
     location: 'Хан-Уул, Яармаг',
@@ -39,6 +49,11 @@ export const featuredListings: Listing[] = [
   },
   {
     id: '3',
+    listing_type: 'sale',
+    poster_type: 'individual',
+    door_type: null,
+    window_type: null,
+    has_certificate: true,
     title: 'Зайсанд пентхаус маягийн байр',
     property_type: 'Lux apartment',
     location: 'Зайсан, Улаанбаатар',
