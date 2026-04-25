@@ -117,6 +117,8 @@ input,select,textarea{width:100%;min-height:50px;border-radius:14px;border:1px s
   .mobile-menu-btn{display:flex !important;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid var(--border);background:white;cursor:pointer;flex-shrink:0}
   .nav-wrap{min-height:64px}
 
+  .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
   .hero{min-height:auto;padding-bottom:0}
   .hero-content{padding:36px 0 28px}
   .hero h1{font-size:1.85rem;line-height:1.16;margin:12px 0}

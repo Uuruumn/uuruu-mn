@@ -19,7 +19,7 @@ export default async function AdminPage() {
       <h1 style={{ color: '#f8fafc', fontSize: '1.6rem', marginBottom: 24 }}>Uuruu.mn — Admin</h1>
 
       {/* KPI cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 14, marginBottom: 28 }}>
         {[
           { label: 'Нийт зар', value: total },
           { label: 'Нийтлэгдсэн', value: approved },
