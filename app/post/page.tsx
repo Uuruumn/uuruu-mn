@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase-server';
 import { PROPERTY_TYPES, LISTING_TYPES, POSTER_TYPES, UB_DISTRICTS, AIMAGS } from '@/lib/constants';
 import { createListing } from './actions';
@@ -8,22 +9,8 @@ export default async function PostPage({ searchParams }: { searchParams: Promise
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    return (
-      <main className="page-main">
-        <div className="container" style={{ maxWidth: 560, textAlign: 'center', paddingTop: 60, paddingBottom: 80 }}>
-          <div style={{ fontSize: '3rem', marginBottom: 20 }}>🏠</div>
-          <h1 style={{ fontSize: '2rem', letterSpacing: '-0.04em', marginBottom: 12 }}>Зар оруулахын тулд нэвтэрнэ үү</h1>
-          <p className="small-meta" style={{ marginBottom: 32 }}>
-            Зар байршуулахын тулд эхлээд бүртгэл үүсгэх эсвэл нэвтэрнэ үү.
-          </p>
-          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="/login" className="btn btn-primary" style={{ minWidth: 160 }}>Нэвтрэх</a>
-            <a href="/login?tab=register" className="btn btn-ghost" style={{ minWidth: 160 }}>Бүртгүүлэх</a>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  redirect('/login?redirect=/post');
+}
 
   const { message } = await searchParams;
 

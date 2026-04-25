@@ -2,13 +2,8 @@ import { PROPERTY_TYPES, LISTING_TYPES, UB_DISTRICTS, AIMAGS } from '@/lib/const
 
 export function SearchBar() {
   return (
-    <form className="search-panel" action="/listings" style={{
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr 1fr auto',
-      alignItems: 'end',
-      gap: 12,
-    }}>
-      <div>
+    <form className="search-panel mobile-search-panel" action="/listings">
+      <div className="search-field">
         <label htmlFor="s-listing-type">Зарлалын төрөл</label>
         <select id="s-listing-type" name="listing_type" defaultValue="">
           <option value="">Бүх төрөл</option>
@@ -17,7 +12,8 @@ export function SearchBar() {
           ))}
         </select>
       </div>
-      <div>
+
+      <div className="search-field">
         <label htmlFor="s-location">Байршил</label>
         <select id="s-location" name="location" defaultValue="">
           <option value="">Бүх байршил</option>
@@ -33,7 +29,8 @@ export function SearchBar() {
           </optgroup>
         </select>
       </div>
-      <div>
+
+      <div className="search-field">
         <label htmlFor="s-type">Үл хөдлөхийн төрөл</label>
         <select id="s-type" name="property_type" defaultValue="">
           <option value="">Бүх төрөл</option>
@@ -42,7 +39,8 @@ export function SearchBar() {
           ))}
         </select>
       </div>
-      <div>
+
+      <div className="search-field">
         <label htmlFor="s-rooms">Өрөө</label>
         <select id="s-rooms" name="rooms" defaultValue="">
           <option value="">Бүх өрөө</option>
@@ -52,7 +50,8 @@ export function SearchBar() {
           <option value="4">4+ өрөө</option>
         </select>
       </div>
-      <button className="btn btn-primary" type="submit" style={{ height: 50, borderRadius: 14, padding: '0 24px', whiteSpace: 'nowrap' }}>
+
+      <button className="btn btn-primary search-submit" type="submit">
         Хайх
       </button>
     </form>
