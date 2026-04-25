@@ -16,6 +16,7 @@ export function NavLinks() {
     <nav className="nav">
       <Link href="/" style={linkStyle('/')}>Нүүр</Link>
       <Link href="/listings" style={linkStyle('/listings')}>Зарууд</Link>
+      <Link href="/info" style={linkStyle('/info')}>Мэдээлэл</Link>
       <Link href="/terms" style={linkStyle('/terms')}>Үйлчилгээний нөхцөл</Link>
     </nav>
   );

@@ -37,6 +37,19 @@ export default async function AdminPage() {
         ))}
       </div>
 
+{/* クイックリンク */}
+<div style={{ display: 'flex', gap: 12, marginBottom: 28 }}>
+  <a href="/manage/articles" style={{
+    background: 'rgba(201,162,39,0.15)',
+    border: '1px solid rgba(201,162,39,0.3)',
+    borderRadius: 12, padding: '12px 20px',
+    color: '#c9a227', fontWeight: 600, fontSize: '0.9rem',
+    textDecoration: 'none'
+  }}>
+    📰 Мэдээлэл удирдах →
+  </a>
+</div>
+
       {/* Listings table */}
       <div style={{
         background: 'rgba(255,255,255,0.03)',

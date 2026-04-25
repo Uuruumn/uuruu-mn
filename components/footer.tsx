@@ -53,7 +53,7 @@ export function Footer() {
             <h4 style={{ marginBottom: 12 }}>Тусламж</h4>
             <Link href="/terms" style={{ display: 'block', color: 'var(--muted)', marginBottom: 8 }}>Үйлчилгээний нөхцөл</Link>
             <Link href="/privacy" style={{ display: 'block', color: 'var(--muted)', marginBottom: 8 }}>Нууцын бодлого</Link>
-            <Link href="/login" style={{ display: 'block', color: 'var(--muted)', marginBottom: 8 }}>Нэвтрэх</Link>
+            <Link href="/info" style={{ display: 'block', color: 'var(--muted)', marginBottom: 8 }}>Мэдээлэл</Link>
           </div>
         </div>
 

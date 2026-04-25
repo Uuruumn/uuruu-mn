@@ -63,8 +63,7 @@ export default async function HomePage() {
               <div className="feature-icon">🏠</div>
               <h3>Зар нэмэхэд амархан</h3>
               <p className="small-meta">
-                Орон сууц, хашаа байшин, газар зэрэг үл хөдлөх хөрөнгийн зараа
-                хурдан, ойлгомжтой байдлаар байршуулна.
+                Орон сууц, газар, хашаа байшингаа хэдхэн алхмаар хурдан байршуулна.
               </p>
             </div>
 
@@ -72,7 +71,7 @@ export default async function HomePage() {
               <div className="feature-icon">30</div>
               <h3>30 хоног идэвхтэй</h3>
               <p className="small-meta">
-                Таны зар 30 хоног нийтлэгдэж, хугацаа дуусмагц автоматаар нуугдана.
+                Таны зар 30 хоног нийтлэгдэж, дараа нь автоматаар нуугдана.
               </p>
             </div>
 
@@ -80,8 +79,7 @@ export default async function HomePage() {
               <div className="feature-icon">☎</div>
               <h3>Эзэнтэй шууд холбогдоно</h3>
               <p className="small-meta">
-                Сонирхсон хэрэглэгчид зар нийтэлсэн хүнтэй шууд холбогдож,
-                хурдан тохиролцох боломжтой.
+                Зуучлалгүйгээр худалдан авагч болон эзэмшигч шууд холбогдоно.
               </p>
             </div>
           </div>

@@ -42,6 +42,11 @@ export function MobileMenu({ isLoggedIn }: { isLoggedIn: boolean }) {
             Зарууд
           </Link>
 
+          <Link href="/info" onClick={() => setOpen(false)} style={{
+  padding: '12px 0', borderBottom: '1px solid var(--border)',
+  color: 'var(--text)', fontWeight: 500, fontSize: '1rem'
+}}>Мэдээлэл</Link>
+
           <Link href="/terms" onClick={() => setOpen(false)} style={menuItemStyle}>
             Үйлчилгээний нөхцөл
           </Link>
