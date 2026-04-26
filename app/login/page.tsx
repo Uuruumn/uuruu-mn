@@ -52,41 +52,34 @@ export default function LoginPage() {
               Uuruu<span style={{ color: 'var(--gold)' }}>.mn</span>
             </div>
           </div>
-
           <h1 style={{ color: 'white', fontSize: '1.6rem', marginBottom: 8 }}>
             Тавтай морил
           </h1>
-
           <p style={{ color: 'rgba(255,255,255,0.55)', marginBottom: 32 }}>
             Зар байршуулахын тулд эхлээд бүртгэл үүсгэх эсвэл нэвтэрнэ үү.
           </p>
-
           {message && (
             <div style={{
               background: 'rgba(239,68,68,0.15)',
               border: '1px solid rgba(239,68,68,0.3)',
-              borderRadius: 12,
-              padding: '12px 16px',
-              color: '#fca5a5',
-              marginBottom: 20
+              borderRadius: 12, padding: '12px 16px',
+              color: '#fca5a5', marginBottom: 20
             }}>
               {message}
             </div>
           )}
-
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <button onClick={() => setMode('login')} type="button" style={{
               width: '100%', height: 52, borderRadius: 14,
               background: 'var(--gold)', color: '#0f172a',
-              fontWeight: 700, border: 'none'
+              fontWeight: 700, border: 'none', cursor: 'pointer',
             }}>
               Нэвтрэх
             </button>
-
             <button onClick={() => setMode('register')} type="button" style={{
               width: '100%', height: 52, borderRadius: 14,
               background: 'rgba(255,255,255,0.08)', color: 'white',
-              border: '1px solid rgba(255,255,255,0.15)'
+              border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer',
             }}>
               Шинэ бүртгэл үүсгэх
             </button>
@@ -111,21 +104,6 @@ export default function LoginPage() {
         padding: '48px 40px',
         backdropFilter: 'blur(20px)',
       }}>
-        {redirect === '/post' && (
-          <button
-            onClick={() => setMode('choose')}
-            type="button"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'rgba(255,255,255,0.5)',
-              marginBottom: 20,
-              cursor: 'pointer'
-            }}
-          >
-            ← Буцах
-          </button>
-        )}
 
         <div style={{ marginBottom: 28 }}>
           <div style={{ fontWeight: 800, fontSize: '1.4rem', color: 'white' }}>
@@ -136,7 +114,6 @@ export default function LoginPage() {
         <h1 style={{ color: 'white', fontSize: '1.6rem', marginBottom: 6 }}>
           {mode === 'login' ? 'Нэвтрэх' : 'Бүртгүүлэх'}
         </h1>
-
         <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 28 }}>
           {mode === 'login' ? 'Имэйл хаягаар нэвтэрнэ үү.' : 'Шинэ бүртгэл үүсгэнэ үү.'}
         </p>
@@ -145,10 +122,8 @@ export default function LoginPage() {
           <div style={{
             background: 'rgba(239,68,68,0.15)',
             border: '1px solid rgba(239,68,68,0.3)',
-            borderRadius: 12,
-            padding: '12px 16px',
-            color: '#fca5a5',
-            marginBottom: 20
+            borderRadius: 12, padding: '12px 16px',
+            color: '#fca5a5', marginBottom: 20
           }}>
             {message}
           </div>
@@ -156,37 +131,53 @@ export default function LoginPage() {
 
         <form style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <input type="hidden" name="redirect" value={redirectTo} />
-
           <input name="email" type="email" placeholder="Имэйл хаяг" required style={{
             width: '100%', height: 52, borderRadius: 14,
             border: '1px solid rgba(255,255,255,0.15)',
             background: 'rgba(255,255,255,0.07)',
-            padding: '0 16px', color: 'white'
+            padding: '0 16px', color: 'white',
           }} />
-
           <input name="password" type="password" placeholder="Нууц үг" required style={{
             width: '100%', height: 52, borderRadius: 14,
             border: '1px solid rgba(255,255,255,0.15)',
             background: 'rgba(255,255,255,0.07)',
-            padding: '0 16px', color: 'white'
+            padding: '0 16px', color: 'white',
           }} />
 
           {mode === 'login' ? (
-            <button formAction={signIn} style={{
-              width: '100%', height: 52, borderRadius: 14,
-              background: 'var(--gold)', color: '#0f172a',
-              fontWeight: 700, border: 'none'
-            }}>
-              Нэвтрэх
-            </button>
+            <>
+              <button formAction={signIn} style={{
+                width: '100%', height: 52, borderRadius: 14,
+                background: 'var(--gold)', color: '#0f172a',
+                fontWeight: 700, border: 'none', cursor: 'pointer',
+              }}>
+                Нэвтрэх
+              </button>
+              <button type="button" onClick={() => setMode('register')} style={{
+                width: '100%', height: 52, borderRadius: 14,
+                background: 'rgba(255,255,255,0.08)', color: 'white',
+                border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer',
+              }}>
+                Бүртгэл байхгүй юу? Бүртгүүлэх
+              </button>
+            </>
           ) : (
-            <button formAction={signUp} style={{
-              width: '100%', height: 52, borderRadius: 14,
-              background: 'var(--gold)', color: '#0f172a',
-              fontWeight: 700, border: 'none'
-            }}>
-              Бүртгүүлэх
-            </button>
+            <>
+              <button formAction={signUp} style={{
+                width: '100%', height: 52, borderRadius: 14,
+                background: 'var(--gold)', color: '#0f172a',
+                fontWeight: 700, border: 'none', cursor: 'pointer',
+              }}>
+                Бүртгүүлэх
+              </button>
+              <button type="button" onClick={() => setMode('login')} style={{
+                width: '100%', height: 52, borderRadius: 14,
+                background: 'rgba(255,255,255,0.08)', color: 'white',
+                border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer',
+              }}>
+                Бүртгэлтэй юу? Нэвтрэх
+              </button>
+            </>
           )}
         </form>
       </div>
