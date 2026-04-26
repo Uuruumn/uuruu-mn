@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { signIn, signUp } from './actions';
 
@@ -13,7 +13,7 @@ function getInitialMode(modeParam: string | null, redirectParam: string | null):
   return 'login';
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const searchParams = useSearchParams();
 
   const message = searchParams.get('message');
@@ -104,20 +104,17 @@ export default function LoginPage() {
         padding: '48px 40px',
         backdropFilter: 'blur(20px)',
       }}>
-
         <div style={{ marginBottom: 28 }}>
           <div style={{ fontWeight: 800, fontSize: '1.4rem', color: 'white' }}>
             Uuruu<span style={{ color: 'var(--gold)' }}>.mn</span>
           </div>
         </div>
-
         <h1 style={{ color: 'white', fontSize: '1.6rem', marginBottom: 6 }}>
           {mode === 'login' ? 'Нэвтрэх' : 'Бүртгүүлэх'}
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 28 }}>
           {mode === 'login' ? 'Имэйл хаягаар нэвтэрнэ үү.' : 'Шинэ бүртгэл үүсгэнэ үү.'}
         </p>
-
         {message && (
           <div style={{
             background: 'rgba(239,68,68,0.15)',
@@ -128,7 +125,6 @@ export default function LoginPage() {
             {message}
           </div>
         )}
-
         <form style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <input type="hidden" name="redirect" value={redirectTo} />
           <input name="email" type="email" placeholder="Имэйл хаяг" required style={{
@@ -143,7 +139,6 @@ export default function LoginPage() {
             background: 'rgba(255,255,255,0.07)',
             padding: '0 16px', color: 'white',
           }} />
-
           {mode === 'login' ? (
             <>
               <button formAction={signIn} style={{
@@ -182,5 +177,13 @@ export default function LoginPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0f172a' }} />}>
+      <LoginForm />
+    </Suspense>
   );
 }
