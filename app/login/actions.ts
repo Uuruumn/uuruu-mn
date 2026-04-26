@@ -39,3 +39,13 @@ export async function signOut() {
   await supabase.auth.signOut();
   redirect('/');
 }
+
+export async function resetPassword(formData: FormData) {
+  const email = String(formData.get('email') || '');
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://uuruu-mn.vercel.app/auth/callback?next=/reset-password',
+  });
+  if (error) redirect(`/login?message=${encodeURIComponent(translateError(error.message))}`);
+  redirect(`/login?message=${encodeURIComponent('Нууц үг сэргээх холбоосыг имэйл рүү илгээлээ')}`);
+}
