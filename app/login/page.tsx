@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -55,18 +55,31 @@ export default function LoginPage() {
   const modeParam = searchParams.get('mode');
   const redirectTo = redirect || '/dashboard';
 
+  const emailRef = useRef<HTMLInputElement>(null);
+
   const [mode, setMode] = useState<Mode>(() => getInitialMode(modeParam, redirect));
 
-  useEffect(() => {
-    setMode(getInitialMode(modeParam, redirect));
-  }, [modeParam, redirect]);
-
-  // ⭐ 成功メッセージ判定
   const isSuccessMessage =
     message?.includes('баталгаажлаа') ||
     message?.includes('Бүртгэл үүслээ') ||
     message?.includes('амжилттай') ||
     message?.includes('илгээлээ');
+
+  useEffect(() => {
+    setMode(getInitialMode(modeParam, redirect));
+  }, [modeParam, redirect]);
+
+  useEffect(() => {
+    if (!isSuccessMessage) return;
+
+    emailRef.current?.focus();
+
+    const timer = setTimeout(() => {
+      window.history.replaceState(null, '', '/login');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [isSuccessMessage]);
 
   const inputStyle = {
     width: '100%',
@@ -107,26 +120,35 @@ export default function LoginPage() {
     >
       {isSuccessMessage ? '✅ ' : '⚠️ '}
       {message}
+      {isSuccessMessage && (
+        <div style={{ marginTop: 6, fontSize: '0.82rem', opacity: 0.85 }}>
+          Одоо нэвтэрч болно.
+        </div>
+      )}
     </div>
   );
 
   if (mode === 'choose') {
     return (
-      <main style={{
-        minHeight: '100vh',
-        display: 'grid',
-        placeItems: 'center',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)',
-      }}>
-        <div style={{
-          width: 'min(420px, calc(100% - 32px))',
-          background: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 28,
-          padding: '48px 40px',
-          backdropFilter: 'blur(20px)',
-          textAlign: 'center',
-        }}>
+      <main
+        style={{
+          minHeight: '100vh',
+          display: 'grid',
+          placeItems: 'center',
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)',
+        }}
+      >
+        <div
+          style={{
+            width: 'min(420px, calc(100% - 32px))',
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: 28,
+            padding: '48px 40px',
+            backdropFilter: 'blur(20px)',
+            textAlign: 'center',
+          }}
+        >
           <div style={{ marginBottom: 32 }}>
             <div style={{ fontWeight: 800, fontSize: '1.8rem', color: 'white' }}>
               Uuruu<span style={{ color: 'var(--gold)' }}>.mn</span>
@@ -144,7 +166,15 @@ export default function LoginPage() {
           {message && <MessageBox />}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <button onClick={() => setMode('login')} style={{ ...secondaryButtonStyle, background: 'var(--gold)', color: '#0f172a', fontWeight: 700 }}>
+            <button
+              onClick={() => setMode('login')}
+              style={{
+                ...secondaryButtonStyle,
+                background: 'var(--gold)',
+                color: '#0f172a',
+                fontWeight: 700,
+              }}
+            >
               Нэвтрэх
             </button>
 
@@ -158,20 +188,24 @@ export default function LoginPage() {
   }
 
   return (
-    <main style={{
-      minHeight: '100vh',
-      display: 'grid',
-      placeItems: 'center',
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)',
-    }}>
-      <div style={{
-        width: 'min(420px, calc(100% - 32px))',
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: 28,
-        padding: '48px 40px',
-        backdropFilter: 'blur(20px)',
-      }}>
+    <main
+      style={{
+        minHeight: '100vh',
+        display: 'grid',
+        placeItems: 'center',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)',
+      }}
+    >
+      <div
+        style={{
+          width: 'min(420px, calc(100% - 32px))',
+          background: 'rgba(255,255,255,0.04)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: 28,
+          padding: '48px 40px',
+          backdropFilter: 'blur(20px)',
+        }}
+      >
         <div style={{ marginBottom: 28 }}>
           <div style={{ fontWeight: 800, fontSize: '1.4rem', color: 'white' }}>
             Uuruu<span style={{ color: 'var(--gold)' }}>.mn</span>
@@ -191,15 +225,35 @@ export default function LoginPage() {
         <form style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <input type="hidden" name="redirect" value={redirectTo} />
 
-          <input name="email" type="email" placeholder="Имэйл хаяг" required style={inputStyle} />
-          <input name="password" type="password" placeholder="Нууц үг" required style={inputStyle} />
+          <input
+            ref={emailRef}
+            name="email"
+            type="email"
+            placeholder="Имэйл хаяг"
+            required
+            style={inputStyle}
+          />
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Нууц үг"
+            required
+            style={inputStyle}
+          />
 
           {mode === 'login' ? (
             <>
               <SubmitButton text="Нэвтрэх" pendingText="Нэвтэрч байна..." formAction={signIn} />
 
               <div style={{ textAlign: 'right', marginTop: 6 }}>
-                <Link href="/forgot-password" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.88rem' }}>
+                <Link
+                  href="/forgot-password"
+                  style={{
+                    color: 'rgba(255,255,255,0.75)',
+                    fontSize: '0.88rem',
+                  }}
+                >
                   Нууц үг мартсан уу?
                 </Link>
               </div>
