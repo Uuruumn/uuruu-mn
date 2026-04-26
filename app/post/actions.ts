@@ -48,6 +48,11 @@ export async function createListing(formData: FormData) {
   const heating = String(formData.get('heating') || '').trim() || null;
   const water = String(formData.get('water') || '').trim() || null;
   const fence = String(formData.get('fence') || '').trim() || null;
+  const buildingMaterial = String(formData.get('building_material') || '').trim() || null;
+  const windowType = String(formData.get('window_type') || '').trim() || null;
+  const floorType = String(formData.get('floor_type') || '').trim() || null;
+  const renovation = String(formData.get('renovation') || '').trim() || null;
+  const balcony = String(formData.get('balcony') || '').trim() || null;
   const hasCertificate = formData.get('has_certificate') === 'true';
   const companyName = String(formData.get('company_name') || '').trim() || null;
   const companyRegister = String(formData.get('company_register') || '').trim() || null;
@@ -79,7 +84,17 @@ export async function createListing(formData: FormData) {
     property_type: propertyType, location, district, khoroo,
     google_map_url: googleMapUrl, video_url: videoUrl,
     price, area, rooms, floor, built_year: builtYear,
-    door_count: doorCount, window_count: windowCount, land_area: landArea, heating, water, fence,
+    door_count: doorCount,
+window_count: windowCount,
+land_area: landArea,
+heating,
+water,
+fence,
+building_material: buildingMaterial,
+window_type: windowType,
+floor_type: floorType,
+renovation,
+balcony,
     has_certificate: hasCertificate, company_name: companyName, company_register: companyRegister, description, phone,
     image_url, extra_images: extra_images.length > 0 ? extra_images : null,
     status: 'pending', payment_status: 'unpaid', payment_amount: 25000,

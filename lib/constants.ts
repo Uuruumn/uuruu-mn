@@ -57,3 +57,34 @@ export const FENCE_TYPES = [
   { value: 'partial', label: 'Хагас хашаатай' },
   { value: 'none', label: 'Хашаагүй' },
 ] as const;
+
+export const BUILDING_MATERIALS = [
+  { value: 'brick', label: 'Тоосго' },
+  { value: 'panel', label: 'Угсармал' },
+  { value: 'concrete', label: 'Төмөр бетон' },
+  { value: 'block', label: 'Блок' },
+] as const;
+
+export const WINDOW_TYPES = [
+  { value: 'vacuum', label: 'Вакум' },
+  { value: 'wood', label: 'Модон' },
+  { value: 'aluminum', label: 'Хөнгөн цагаан' },
+] as const;
+
+export const FLOOR_TYPES = [
+  { value: 'parquet', label: 'Паркет' },
+  { value: 'tile', label: 'Плита' },
+  { value: 'laminate', label: 'Ламинат' },
+  { value: 'wood', label: 'Модон' },
+] as const;
+
+export const RENOVATION_TYPES = [
+  { value: 'new', label: 'Шинэ' },
+  { value: 'normal', label: 'Энгийн' },
+  { value: 'needs', label: 'Засвар шаардлагатай' },
+] as const;
+
+export const YES_NO = [
+  { value: 'yes', label: 'Тийм' },
+  { value: 'no', label: 'Үгүй' },
+] as const;

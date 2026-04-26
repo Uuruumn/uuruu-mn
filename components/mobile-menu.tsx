@@ -51,6 +51,10 @@ export function MobileMenu({ isLoggedIn }: { isLoggedIn: boolean }) {
             Үйлчилгээний нөхцөл
           </Link>
 
+          <Link href="/favorites" onClick={() => setOpen(false)} style={menuItemStyle}>
+  Хадгалсан зарууд
+</Link>
+
           {isLoggedIn ? (
             <>
               <Link href="/dashboard" onClick={() => setOpen(false)} style={menuItemStyle}>

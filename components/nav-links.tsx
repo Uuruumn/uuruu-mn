@@ -1,16 +1,21 @@
 'use client';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export function NavLinks() {
   const pathname = usePathname();
 
-  const linkStyle = (href: string) => ({
-    color: pathname === href ? 'var(--text)' : 'var(--muted)',
-    fontWeight: pathname === href ? 700 : 500,
-    borderBottom: pathname === href ? '2px solid var(--gold)' : '2px solid transparent',
-    paddingBottom: 2,
-  });
+  const linkStyle = (href: string) => {
+    const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
+
+    return {
+      color: isActive ? 'var(--text)' : 'var(--muted)',
+      fontWeight: isActive ? 700 : 500,
+      borderBottom: isActive ? '2px solid var(--gold)' : '2px solid transparent',
+      paddingBottom: 2,
+    };
+  };
 
   return (
     <nav className="nav">
@@ -18,6 +23,7 @@ export function NavLinks() {
       <Link href="/listings" style={linkStyle('/listings')}>Зарууд</Link>
       <Link href="/info" style={linkStyle('/info')}>Мэдээлэл</Link>
       <Link href="/terms" style={linkStyle('/terms')}>Үйлчилгээний нөхцөл</Link>
+      <Link href="/favorites" style={linkStyle('/favorites')}>Хадгалсан зар</Link>
     </nav>
   );
 }
