@@ -7,8 +7,6 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code');
   const next = searchParams.get('next') ?? '/';
 
-  console.log('Auth callback called, code:', code);
-
   if (code) {
     try {
       const cookieStore = await cookies();
@@ -29,16 +27,17 @@ export async function GET(request: NextRequest) {
         }
       );
 
-      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-      console.log('exchangeCodeForSession result:', { data, error });
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
 
       if (!error) {
         return NextResponse.redirect(`${origin}${next}`);
       }
-    } catch (err) {
-      console.error('Auth callback error:', err);
+
+      return NextResponse.redirect(`${origin}/login?error=auth&message=${encodeURIComponent(error.message)}`);
+    } catch (err: any) {
+      return NextResponse.redirect(`${origin}/login?error=auth&message=${encodeURIComponent(err.message ?? 'unknown')}`);
     }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=auth`);
+  return NextResponse.redirect(`${origin}/login?error=auth&message=no_code`);
 }
