@@ -61,6 +61,13 @@ export default function LoginPage() {
     setMode(getInitialMode(modeParam, redirect));
   }, [modeParam, redirect]);
 
+  // ⭐ 成功メッセージ判定
+  const isSuccessMessage =
+    message?.includes('баталгаажлаа') ||
+    message?.includes('Бүртгэл үүслээ') ||
+    message?.includes('амжилттай') ||
+    message?.includes('илгээлээ');
+
   const inputStyle = {
     width: '100%',
     height: 52,
@@ -70,7 +77,7 @@ export default function LoginPage() {
     padding: '0 16px',
     color: 'white',
   };
-  
+
   const secondaryButtonStyle = {
     width: '100%',
     height: 52,
@@ -80,6 +87,28 @@ export default function LoginPage() {
     border: '1px solid rgba(255,255,255,0.15)',
     cursor: 'pointer',
   };
+
+  const MessageBox = () => (
+    <div
+      style={{
+        background: isSuccessMessage
+          ? 'rgba(16,185,129,0.15)'
+          : 'rgba(239,68,68,0.15)',
+        border: isSuccessMessage
+          ? '1px solid rgba(16,185,129,0.35)'
+          : '1px solid rgba(239,68,68,0.3)',
+        borderRadius: 12,
+        padding: '12px 16px',
+        color: isSuccessMessage ? '#86efac' : '#fca5a5',
+        marginBottom: 20,
+        fontWeight: 600,
+        textAlign: 'center',
+      }}
+    >
+      {isSuccessMessage ? '✅ ' : '⚠️ '}
+      {message}
+    </div>
+  );
 
   if (mode === 'choose') {
     return (
@@ -112,38 +141,14 @@ export default function LoginPage() {
             Зар байршуулахын тулд эхлээд бүртгэл үүсгэх эсвэл нэвтэрнэ үү.
           </p>
 
-          {message && (
-            <div style={{
-              background: 'rgba(239,68,68,0.15)',
-              border: '1px solid rgba(239,68,68,0.3)',
-              borderRadius: 12,
-              padding: '12px 16px',
-              color: '#fca5a5',
-              marginBottom: 20,
-            }}>
-              {message}
-            </div>
-          )}
+          {message && <MessageBox />}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <button
-              onClick={() => setMode('login')}
-              type="button"
-              style={{
-                width: '100%',
-                height: 52,
-                borderRadius: 14,
-                background: 'var(--gold)',
-                color: '#0f172a',
-                fontWeight: 700,
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
+            <button onClick={() => setMode('login')} style={{ ...secondaryButtonStyle, background: 'var(--gold)', color: '#0f172a', fontWeight: 700 }}>
               Нэвтрэх
             </button>
 
-            <button onClick={() => setMode('register')} type="button" style={secondaryButtonStyle}>
+            <button onClick={() => setMode('register')} style={secondaryButtonStyle}>
               Шинэ бүртгэл үүсгэх
             </button>
           </div>
@@ -181,61 +186,20 @@ export default function LoginPage() {
           {mode === 'login' ? 'Имэйл хаягаар нэвтэрнэ үү.' : 'Шинэ бүртгэл үүсгэнэ үү.'}
         </p>
 
-        {message && (
-          <div style={{
-            background: 'rgba(239,68,68,0.15)',
-            border: '1px solid rgba(239,68,68,0.3)',
-            borderRadius: 12,
-            padding: '12px 16px',
-            color: '#fca5a5',
-            marginBottom: 20,
-          }}>
-            {message}
-          </div>
-        )}
+        {message && <MessageBox />}
 
         <form style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <input type="hidden" name="redirect" value={redirectTo} />
 
-          <input
-            name="email"
-            type="email"
-            placeholder="Имэйл хаяг"
-            required
-            onInvalid={(e) => e.currentTarget.setCustomValidity('Имэйл хаяг буруу байна')}
-            onInput={(e) => e.currentTarget.setCustomValidity('')}
-            style={inputStyle}
-          />
-
-          <input
-            name="password"
-            type="password"
-            placeholder="Нууц үг"
-            required
-            onInvalid={(e) => e.currentTarget.setCustomValidity('Нууц үгээ оруулна уу')}
-            onInput={(e) => e.currentTarget.setCustomValidity('')}
-            style={inputStyle}
-          />
+          <input name="email" type="email" placeholder="Имэйл хаяг" required style={inputStyle} />
+          <input name="password" type="password" placeholder="Нууц үг" required style={inputStyle} />
 
           {mode === 'login' ? (
             <>
-              <SubmitButton
-                text="Нэвтрэх"
-                pendingText="Нэвтэрч байна..."
-                formAction={signIn}
-              />
+              <SubmitButton text="Нэвтрэх" pendingText="Нэвтэрч байна..." formAction={signIn} />
 
               <div style={{ textAlign: 'right', marginTop: 6 }}>
-                <Link
-                  href="/forgot-password"
-                  style={{
-                    color: 'rgba(255,255,255,0.75)',
-                    fontSize: '0.88rem',
-                    textDecoration: 'none',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
-                  onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
-                >
+                <Link href="/forgot-password" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.88rem' }}>
                   Нууц үг мартсан уу?
                 </Link>
               </div>
@@ -246,11 +210,7 @@ export default function LoginPage() {
             </>
           ) : (
             <>
-              <SubmitButton
-                text="Бүртгүүлэх"
-                pendingText="Бүртгэж байна..."
-                formAction={signUp}
-              />
+              <SubmitButton text="Бүртгүүлэх" pendingText="Бүртгэж байна..." formAction={signUp} />
 
               <button type="button" onClick={() => setMode('login')} style={secondaryButtonStyle}>
                 Бүртгэлтэй юу? Нэвтрэх
