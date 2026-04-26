@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { signIn, signUp } from './actions';
@@ -12,6 +13,38 @@ function getInitialMode(modeParam: string | null, redirectParam: string | null):
   if (modeParam === 'register') return 'register';
   if (redirectParam === '/post') return 'choose';
   return 'login';
+}
+
+function SubmitButton({
+  text,
+  pendingText,
+  formAction,
+}: {
+  text: string;
+  pendingText: string;
+  formAction: (formData: FormData) => void;
+}) {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      formAction={formAction}
+      disabled={pending}
+      style={{
+        width: '100%',
+        height: 52,
+        borderRadius: 14,
+        background: 'var(--gold)',
+        color: '#0f172a',
+        fontWeight: 700,
+        border: 'none',
+        cursor: pending ? 'not-allowed' : 'pointer',
+        opacity: pending ? 0.7 : 1,
+      }}
+    >
+      {pending ? pendingText : text}
+    </button>
+  );
 }
 
 export default function LoginPage() {
@@ -37,18 +70,7 @@ export default function LoginPage() {
     padding: '0 16px',
     color: 'white',
   };
-
-  const primaryButtonStyle = {
-    width: '100%',
-    height: 52,
-    borderRadius: 14,
-    background: 'var(--gold)',
-    color: '#0f172a',
-    fontWeight: 700,
-    border: 'none',
-    cursor: 'pointer',
-  };
-
+  
   const secondaryButtonStyle = {
     width: '100%',
     height: 52,
@@ -104,7 +126,20 @@ export default function LoginPage() {
           )}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <button onClick={() => setMode('login')} type="button" style={primaryButtonStyle}>
+            <button
+              onClick={() => setMode('login')}
+              type="button"
+              style={{
+                width: '100%',
+                height: 52,
+                borderRadius: 14,
+                background: 'var(--gold)',
+                color: '#0f172a',
+                fontWeight: 700,
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
               Нэвтрэх
             </button>
 
@@ -167,9 +202,7 @@ export default function LoginPage() {
             type="email"
             placeholder="Имэйл хаяг"
             required
-            onInvalid={(e) =>
-              e.currentTarget.setCustomValidity('Имэйл хаяг буруу байна')
-            }
+            onInvalid={(e) => e.currentTarget.setCustomValidity('Имэйл хаяг буруу байна')}
             onInput={(e) => e.currentTarget.setCustomValidity('')}
             style={inputStyle}
           />
@@ -179,18 +212,18 @@ export default function LoginPage() {
             type="password"
             placeholder="Нууц үг"
             required
-            onInvalid={(e) =>
-              e.currentTarget.setCustomValidity('Нууц үгээ оруулна уу')
-            }
+            onInvalid={(e) => e.currentTarget.setCustomValidity('Нууц үгээ оруулна уу')}
             onInput={(e) => e.currentTarget.setCustomValidity('')}
             style={inputStyle}
           />
 
           {mode === 'login' ? (
             <>
-              <button formAction={signIn} style={primaryButtonStyle}>
-                Нэвтрэх
-              </button>
+              <SubmitButton
+                text="Нэвтрэх"
+                pendingText="Нэвтэрч байна..."
+                formAction={signIn}
+              />
 
               <div style={{ textAlign: 'right', marginTop: 6 }}>
                 <Link
@@ -213,9 +246,11 @@ export default function LoginPage() {
             </>
           ) : (
             <>
-              <button formAction={signUp} style={primaryButtonStyle}>
-                Бүртгүүлэх
-              </button>
+              <SubmitButton
+                text="Бүртгүүлэх"
+                pendingText="Бүртгэж байна..."
+                formAction={signUp}
+              />
 
               <button type="button" onClick={() => setMode('login')} style={secondaryButtonStyle}>
                 Бүртгэлтэй юу? Нэвтрэх
