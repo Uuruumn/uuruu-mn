@@ -20,16 +20,44 @@ export default function LoginPage() {
   const message = searchParams.get('message');
   const redirect = searchParams.get('redirect');
   const modeParam = searchParams.get('mode');
-
   const redirectTo = redirect || '/dashboard';
 
-  const [mode, setMode] = useState<Mode>(() =>
-    getInitialMode(modeParam, redirect)
-  );
+  const [mode, setMode] = useState<Mode>(() => getInitialMode(modeParam, redirect));
 
   useEffect(() => {
     setMode(getInitialMode(modeParam, redirect));
   }, [modeParam, redirect]);
+
+  const inputStyle = {
+    width: '100%',
+    height: 52,
+    borderRadius: 14,
+    border: '1px solid rgba(255,255,255,0.15)',
+    background: 'rgba(255,255,255,0.07)',
+    padding: '0 16px',
+    color: 'white',
+  };
+
+  const primaryButtonStyle = {
+    width: '100%',
+    height: 52,
+    borderRadius: 14,
+    background: 'var(--gold)',
+    color: '#0f172a',
+    fontWeight: 700,
+    border: 'none',
+    cursor: 'pointer',
+  };
+
+  const secondaryButtonStyle = {
+    width: '100%',
+    height: 52,
+    borderRadius: 14,
+    background: 'rgba(255,255,255,0.08)',
+    color: 'white',
+    border: '1px solid rgba(255,255,255,0.15)',
+    cursor: 'pointer',
+  };
 
   if (mode === 'choose') {
     return (
@@ -76,28 +104,11 @@ export default function LoginPage() {
           )}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <button onClick={() => setMode('login')} type="button" style={{
-              width: '100%',
-              height: 52,
-              borderRadius: 14,
-              background: 'var(--gold)',
-              color: '#0f172a',
-              fontWeight: 700,
-              border: 'none',
-              cursor: 'pointer',
-            }}>
+            <button onClick={() => setMode('login')} type="button" style={primaryButtonStyle}>
               Нэвтрэх
             </button>
 
-            <button onClick={() => setMode('register')} type="button" style={{
-              width: '100%',
-              height: 52,
-              borderRadius: 14,
-              background: 'rgba(255,255,255,0.08)',
-              color: 'white',
-              border: '1px solid rgba(255,255,255,0.15)',
-              cursor: 'pointer',
-            }}>
+            <button onClick={() => setMode('register')} type="button" style={secondaryButtonStyle}>
               Шинэ бүртгэл үүсгэх
             </button>
           </div>
@@ -156,15 +167,11 @@ export default function LoginPage() {
             type="email"
             placeholder="Имэйл хаяг"
             required
-            style={{
-              width: '100%',
-              height: 52,
-              borderRadius: 14,
-              border: '1px solid rgba(255,255,255,0.15)',
-              background: 'rgba(255,255,255,0.07)',
-              padding: '0 16px',
-              color: 'white',
-            }}
+            onInvalid={(e) =>
+              e.currentTarget.setCustomValidity('Имэйл хаяг буруу байна')
+            }
+            onInput={(e) => e.currentTarget.setCustomValidity('')}
+            style={inputStyle}
           />
 
           <input
@@ -172,83 +179,45 @@ export default function LoginPage() {
             type="password"
             placeholder="Нууц үг"
             required
-            style={{
-              width: '100%',
-              height: 52,
-              borderRadius: 14,
-              border: '1px solid rgba(255,255,255,0.15)',
-              background: 'rgba(255,255,255,0.07)',
-              padding: '0 16px',
-              color: 'white',
-            }}
+            onInvalid={(e) =>
+              e.currentTarget.setCustomValidity('Нууц үгээ оруулна уу')
+            }
+            onInput={(e) => e.currentTarget.setCustomValidity('')}
+            style={inputStyle}
           />
 
           {mode === 'login' ? (
             <>
-              <button formAction={signIn} style={{
-                width: '100%',
-                height: 52,
-                borderRadius: 14,
-                background: 'var(--gold)',
-                color: '#0f172a',
-                fontWeight: 700,
-                border: 'none',
-                cursor: 'pointer',
-              }}>
+              <button formAction={signIn} style={primaryButtonStyle}>
                 Нэвтрэх
               </button>
 
               <div style={{ textAlign: 'right', marginTop: 6 }}>
-  <Link
-    href="/forgot-password"
-    style={{
-      color: 'rgba(255,255,255,0.75)',
-      fontSize: '0.88rem',
-      textDecoration: 'none',
-    }}
-    onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
-    onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
-  >
-    Нууц үг мартсан уу?
-  </Link>
-</div>
+                <Link
+                  href="/forgot-password"
+                  style={{
+                    color: 'rgba(255,255,255,0.75)',
+                    fontSize: '0.88rem',
+                    textDecoration: 'none',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+                  onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+                >
+                  Нууц үг мартсан уу?
+                </Link>
+              </div>
 
-              <button type="button" onClick={() => setMode('register')} style={{
-                width: '100%',
-                height: 52,
-                borderRadius: 14,
-                background: 'rgba(255,255,255,0.08)',
-                color: 'white',
-                border: '1px solid rgba(255,255,255,0.15)',
-                cursor: 'pointer',
-              }}>
+              <button type="button" onClick={() => setMode('register')} style={secondaryButtonStyle}>
                 Бүртгэл байхгүй юу? Бүртгүүлэх
               </button>
             </>
           ) : (
             <>
-              <button formAction={signUp} style={{
-                width: '100%',
-                height: 52,
-                borderRadius: 14,
-                background: 'var(--gold)',
-                color: '#0f172a',
-                fontWeight: 700,
-                border: 'none',
-                cursor: 'pointer',
-              }}>
+              <button formAction={signUp} style={primaryButtonStyle}>
                 Бүртгүүлэх
               </button>
 
-              <button type="button" onClick={() => setMode('login')} style={{
-                width: '100%',
-                height: 52,
-                borderRadius: 14,
-                background: 'rgba(255,255,255,0.08)',
-                color: 'white',
-                border: '1px solid rgba(255,255,255,0.15)',
-                cursor: 'pointer',
-              }}>
+              <button type="button" onClick={() => setMode('login')} style={secondaryButtonStyle}>
                 Бүртгэлтэй юу? Нэвтрэх
               </button>
             </>
