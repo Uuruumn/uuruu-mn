@@ -198,19 +198,20 @@ export default function LoginPage() {
                 Нэвтрэх
               </button>
 
-              <Link
-                href="/forgot-password"
-                style={{
-                  color: 'rgba(255,255,255,0.75)',
-                  textAlign: 'center',
-                  fontSize: '0.92rem',
-                  marginTop: 2,
-                  textDecoration: 'underline',
-                  textUnderlineOffset: 4,
-                }}
-              >
-                Нууц үг мартсан уу?
-              </Link>
+              <div style={{ textAlign: 'right', marginTop: 6 }}>
+  <Link
+    href="/forgot-password"
+    style={{
+      color: 'rgba(255,255,255,0.75)',
+      fontSize: '0.88rem',
+      textDecoration: 'none',
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+    onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+  >
+    Нууц үг мартсан уу?
+  </Link>
+</div>
 
               <button type="button" onClick={() => setMode('register')} style={{
                 width: '100%',
