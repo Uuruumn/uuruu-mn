@@ -121,13 +121,16 @@ export default function PostForm() {
       )}
 
       {hasCertificate && (
-        <form className="form-grid" action={async (formData) => {
+        <form className="form-grid" onSubmit={async (e) => {
+  e.preventDefault();
+  if (isSubmitting) return;
   setIsSubmitting(true);
+  const formData = new FormData(e.currentTarget);
   try {
     await createListing(formData);
-  } catch (e: any) {
+  } catch (err: any) {
     setIsSubmitting(false);
-    if (e?.message === 'NOCERT') {
+    if (err?.message === 'NOCERT') {
       alert('Гэрчилгээгүй үл хөдлөхийн хувьд манай компанитай холбогдоно уу:\nИ-мэйл: sonsooch@gmail.com\nУтас: 80702326');
     }
   }
