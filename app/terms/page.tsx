@@ -165,8 +165,7 @@ export default function TermsPage() {
             <h2 style={{ fontSize: '1.15rem', marginBottom: 12 }}>12. Холбоо барих</h2>
             <div style={{ marginTop: 12, padding: '16px 20px', background: 'rgba(201,162,39,0.08)', borderRadius: 12, borderLeft: '3px solid var(--gold)' }}>
               <p><strong>Очир Нью Софт ХХК</strong></p>
-              <p>Улаанбаатар, Чингэлтэй дүүрэг, 3-р хороо,</p>
-              <p>Энхтайваны өргөн чөлөө 19/4, 8 тоот</p>
+              <p>Улаанбаатар, Чингэлтэй дүүрэг</p>
               <p>Утас: <strong>8070-2326</strong></p>
               <p>И-мэйл: <strong>sonsooch99@gmail.com</strong></p>
             </div>

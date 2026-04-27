@@ -17,12 +17,12 @@ export default async function HomePage() {
     <main>
       <section className="hero">
         <div className="container hero-content">
-          <div className="eyebrow">Монголын үл хөдлөх хөрөнгийн платформ</div>
-          <h1>Өөрт тохирох байр, орон сууцыг олоорой</h1>
-          <p className="hero-text">
-            Uuruu.mn нь үл хөдлөх хөрөнгө зарах, түрээслэхэд зориулсан цэвэр, орчин үеийн платформ юм.
-            Сонирхсон хэрэглэгчид зар оруулагчтай шууд холбогдох боломжтой.
-          </p>
+         <div className="eyebrow">Орон сууц • Газар • Байшин • Бизнес</div>
+<h1>Өөрт тохирох үл хөдлөхөө олоорой</h1>
+<p className="hero-text">
+  <span className="desktop-only">Uuruu.mn нь орон сууц, газар, байшин, бизнесийн талбайг зарах, түрээслэхэд зориулсан орчин үеийн платформ юм.</span>
+  <span className="mobile-only" style={{ display: 'none' }}>Зуучлалгүйгээр эзэмшигчтэй шууд холбогдоно</span>
+</p>
           <SearchBar />
         </div>
       </section>

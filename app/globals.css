@@ -19,7 +19,7 @@ img{max-width:100%;display:block}
 .container{width:min(1180px,calc(100% - 32px));margin:0 auto}
 
 /* ヘッダー */
-.site-header{position:sticky;top:0;z-index:100;background:rgba(248,250,252,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.site-header{position:sticky;top:0;z-index:100;background:rgba(248,250,252,.95);border-bottom:1px solid var(--border)}
 .nav-wrap{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}
 .nav{display:flex;gap:28px;align-items:center}
 .nav a{color:var(--muted);font-weight:500}
@@ -181,6 +181,10 @@ textarea{min-height:150px;padding:14px;resize:vertical}
   .listing-layout aside{order:2}
   .listing-layout section{order:1}
   .kpi-grid{grid-template-columns:repeat(2,1fr) !important}
+  :root { --hero-text-display: none; }
+  .hero .mobile-only { display: inline !important; }
+  .desktop-only { display: none !important; }
+  .eyebrow { font-size: 0.65rem; letter-spacing: 0.1em; }
 }
 .info-section {
   margin-top: 26px;
