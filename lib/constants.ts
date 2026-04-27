@@ -2,6 +2,19 @@ export const PROPERTY_TYPES = [
   { value: 'apartment', label: 'Орон сууц' },
   { value: 'house', label: 'Хашаа байшин' },
   { value: 'land', label: 'Газар' },
+  { value: 'commercial', label: 'Үйлчилгээний талбай' },
+] as const;
+
+export const COMMERCIAL_SUBTYPES = [
+  { value: 'office', label: 'Оффис' },
+  { value: 'shop', label: 'Дэлгүүр' },
+  { value: 'restaurant', label: 'Ресторан / Кафе' },
+  { value: 'salon', label: 'Салон' },
+  { value: 'education', label: 'Сургалтын төв' },
+  { value: 'fitness', label: 'Фитнес / Спорт' },
+  { value: 'auto', label: 'Авто үйлчилгээ' },
+  { value: 'warehouse', label: 'Агуулах' },
+  { value: 'other', label: 'Үйлчилгээний төв' },
 ] as const;
 
 export const LISTING_TYPES = [

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import {
   PROPERTY_TYPES,
+  COMMERCIAL_SUBTYPES,
   LISTING_TYPES,
   POSTER_TYPES,
   UB_DISTRICTS,
@@ -24,11 +25,16 @@ export default function PostForm() {
   const [listingType, setListingType] = useState('sale');
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
+  const [commercialSubtype, setCommercialSubtype] = useState('');
   const [hasCertificate, setHasCertificate] = useState(true);
+  const [priceDisplay, setPriceDisplay] = useState('');
+  const [description, setDescription] = useState('');
+  const [imageFiles, setImageFiles] = useState<FileList | null>(null);
 
   const isApartment = propertyType === 'apartment';
   const isHouse = propertyType === 'house';
   const isLand = propertyType === 'land';
+  const isCommercial = propertyType === 'commercial';
 
   return (
     <div>
@@ -158,10 +164,17 @@ export default function PostForm() {
 
           <input className="full-width" name="title" placeholder="Зарын гарчиг" required />
 
-          <select name="property_type" required defaultValue="" onChange={e => setPropertyType(e.target.value)}>
-            <option value="" disabled>Үл хөдлөхийн төрөл</option>
-            {PROPERTY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+          <select name="property_type" required defaultValue="" onChange={e => { setPropertyType(e.target.value); setCommercialSubtype(''); }}>
+             <option value="" disabled>Үл хөдлөхийн төрөл</option>
+              {PROPERTY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
           </select>
+
+        {isCommercial && (
+        <select name="commercial_subtype" required defaultValue="" onChange={e => setCommercialSubtype(e.target.value)}>
+        <option value="" disabled>Үйлчилгээний төрөл сонгох</option>
+        {COMMERCIAL_SUBTYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+          </select>
+          )}
 
           <select name="location" required defaultValue="" onChange={e => setLocation(e.target.value)}>
             <option value="" disabled>Хот / Аймаг сонгох</option>
@@ -182,8 +195,20 @@ export default function PostForm() {
             </select>
           )}
 
-          <input name="google_map_url" type="url" placeholder="Google Map холбоос (заавал биш)" />
-          <input name="price" type="number" placeholder="Үнэ (₮)" required min="1" />
+          <input name="google_map_url" type="url" placeholder="Google Map URL оруулна уу" />
+          <input type="hidden" name="price" value={priceDisplay.replace(/,/g, '')} />
+          <input
+            type="text"
+            placeholder="Үнэ (₮) — жишээ: 150,000,000"
+            value={priceDisplay}
+            inputMode="numeric"
+            pattern="[0-9,]*"
+            onChange={e => {
+            const raw = e.target.value.replace(/[^0-9]/g, '');
+            setPriceDisplay(raw ? Number(raw).toLocaleString() : '');
+          }}
+        required
+      />
 
           {isApartment && (
             <>
@@ -256,22 +281,79 @@ export default function PostForm() {
           )}
 
           <input className="full-width" name="phone" placeholder="Утасны дугаар" required />
-          <input className="full-width" name="video_url" type="url" placeholder="YouTube / Facebook видео холбоос (заавал биш)" />
+          <div className="full-width">
+  <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, fontSize: '0.92rem' }}>
+    YouTube / Facebook зэрэг видео холбоос (заавал биш)
+  </label>
+  <input className="full-width" name="video_url" type="url" placeholder="URL оруулна уу" />
+</div>
 
           <div className="full-width">
-            <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, fontSize: '0.92rem' }}>
-              Зураг оруулах — дээд тал нь 5 зураг (заавал биш)
-            </label>
-            <input name="images" type="file" multiple accept="image/jpeg,image/png,image/webp" style={{ height: 'auto', padding: '10px 14px', width: '100%' }} />
-            <p className="small-meta" style={{ marginTop: 8 }}>
-              Ctrl/Cmd дарж олон зураг нэгэн зэрэг сонгоно уу. JPG, PNG, WEBP — тус бүр дээд тал нь 5MB.
-            </p>
-          </div>
+  <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, fontSize: '0.92rem' }}>
+    Зураг байршуулах — дээд тал нь 10 зураг (заавал биш)
+  </label>
+  
+  <div
+    onClick={() => document.getElementById('image-upload-input')?.click()}
+    style={{
+      border: '2px dashed var(--gold)',
+      borderRadius: 12,
+      padding: '20px',
+      textAlign: 'center',
+      cursor: 'pointer',
+      background: '#fafafa',
+    }}
+  >
+    <div style={{ fontSize: '2rem', marginBottom: 8 }}>📷</div>
+    <div style={{ fontWeight: 600, marginBottom: 4 }}>Зураг байршуулах </div>
+    <div className="small-meta">JPG, PNG, WEBP — тус бүр дээд тал нь 5MB</div>
+  </div>
+  <input
+    id="image-upload-input"
+    name="images"
+    type="file"
+    multiple
+    accept="image/jpeg,image/png,image/webp"
+    style={{ display: 'none' }}
+    onChange={e => {
+      const files = e.target.files;
+      if (files && files.length > 10) {
+        alert('Дээд тал нь 10 зураг сонгоно уу');
+        e.target.value = '';
+        setImageFiles(null);
+        return;
+      }
+      setImageFiles(files);
+    }}
+  />
+  {imageFiles && imageFiles.length > 0 && (
+    <p className="small-meta" style={{ marginTop: 8, color: 'green' }}>
+      ✓ {imageFiles.length} зураг сонгогдлоо
+    </p>
+  )}
+</div>
 
-          <textarea className="full-width" name="description" placeholder="Тайлбар" required />
+          <div className="full-width">
+  <textarea
+    className="full-width"
+    name="description"
+    placeholder="Тайлбар"
+    required
+    maxLength={1000}
+    value={description}
+    onChange={e => {
+    const clean = e.target.value.replace(/[^a-zA-Z0-9\u0400-\u04FF .,₮-]/g, '');
+    setDescription(clean);
+  }}
+    style={{ resize: 'vertical', minHeight: 120 }}
+  />
+  <p className="small-meta" style={{ marginTop: 4, textAlign: 'right' }}>
+    {description.length} / 1000
+  </p>
+</div>
 
           <button className="btn btn-primary btn-block full-width" type="submit">
-            Зар илгээх
+            Зар нийтлэх
           </button>
         </form>
       )}
