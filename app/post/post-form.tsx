@@ -167,21 +167,33 @@ export default function PostForm() {
             </>
           )}
 
-          <input className="full-width" name="title" placeholder="Зарын гарчиг" required />
+          <input className="full-width" name="title" placeholder="Зарын гарчиг" required
+  onInvalid={e => (e.currentTarget as HTMLInputElement).setCustomValidity('Зарын гарчигаа оруулна уу')}
+  onInput={e => (e.currentTarget as HTMLInputElement).setCustomValidity('')}
+/>
 
-          <select name="property_type" required defaultValue="" onChange={e => { setPropertyType(e.target.value); setCommercialSubtype(''); }}>
+          <select name="property_type" required defaultValue="" onChange={e => { setPropertyType(e.target.value); setCommercialSubtype(''); }}
+  onInvalid={e => (e.currentTarget as HTMLSelectElement).setCustomValidity('Үл хөдлөхийн төрлөө сонгоно уу')}
+  onInput={e => (e.currentTarget as HTMLSelectElement).setCustomValidity('')}
+>
              <option value="" disabled>Үл хөдлөхийн төрөл</option>
               {PROPERTY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
           </select>
 
         {isCommercial && (
-        <select name="commercial_subtype" required defaultValue="" onChange={e => setCommercialSubtype(e.target.value)}>
+        <select name="commercial_subtype" required defaultValue="" onChange={e => setCommercialSubtype(e.target.value)}
+  onInvalid={e => (e.currentTarget as HTMLSelectElement).setCustomValidity('Үйлчилгээний төрлөө сонгоно уу')}
+  onInput={e => (e.currentTarget as HTMLSelectElement).setCustomValidity('')}
+>
         <option value="" disabled>Үйлчилгээний төрөл сонгох</option>
         {COMMERCIAL_SUBTYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
           </select>
           )}
 
-          <select name="location" required defaultValue="" onChange={e => setLocation(e.target.value)}>
+          <select name="location" required defaultValue="" onChange={e => setLocation(e.target.value)}
+  onInvalid={e => (e.currentTarget as HTMLSelectElement).setCustomValidity('Хот / Аймгаа сонгоно уу')}
+  onInput={e => (e.currentTarget as HTMLSelectElement).setCustomValidity('')}
+>
             <option value="" disabled>Хот / Аймаг сонгох</option>
             <optgroup label="Улаанбаатар — Дүүрэг">
               {UB_DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
@@ -203,17 +215,19 @@ export default function PostForm() {
           <input name="google_map_url" type="url" placeholder="Google Map URL оруулна уу" />
           <input type="hidden" name="price" value={priceDisplay.replace(/,/g, '')} />
           <input
-            type="text"
-            placeholder="Үнэ (₮) — жишээ: 150,000,000"
-            value={priceDisplay}
-            inputMode="numeric"
-            pattern="[0-9,]*"
-            onChange={e => {
-            const raw = e.target.value.replace(/[^0-9]/g, '');
-            setPriceDisplay(raw ? Number(raw).toLocaleString() : '');
-          }}
-        required
-      />
+  type="text"
+  placeholder="Үнэ (₮) — жишээ: 150,000,000"
+  value={priceDisplay}
+  inputMode="numeric"
+  pattern="[0-9,]*"
+  onChange={e => {
+    const raw = e.target.value.replace(/[^0-9]/g, '');
+    setPriceDisplay(raw ? Number(raw).toLocaleString() : '');
+  }}
+  required
+  onInvalid={e => (e.currentTarget as HTMLInputElement).setCustomValidity('Үнээ оруулна уу')}
+  onInput={e => (e.currentTarget as HTMLInputElement).setCustomValidity('')}
+/>
 
           {isApartment && (
             <>
@@ -313,7 +327,10 @@ export default function PostForm() {
             <input type="hidden" name="rooms" value="0" />
           )}
 
-          <input className="full-width" name="phone" placeholder="Утасны дугаар" required />
+          <input className="full-width" name="phone" placeholder="Утасны дугаар" required
+  onInvalid={e => (e.currentTarget as HTMLInputElement).setCustomValidity('Утасны дугаараа оруулна уу')}
+  onInput={e => (e.currentTarget as HTMLInputElement).setCustomValidity('')}
+/>
           <div className="full-width">
   <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, fontSize: '0.92rem' }}>
     YouTube / Facebook зэрэг видео холбоос (заавал биш)
