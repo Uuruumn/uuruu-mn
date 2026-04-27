@@ -16,6 +16,7 @@ const PROPERTY_TYPE_LABEL: Record<string, string> = {
   apartment: 'Орон сууц',
   house: 'Хашаа байшин',
   land: 'Газар',
+  commercial: 'Үйлчилгээний талбай',
 };
 
 export function ListingCard({ listing }: { listing: Listing }) {
@@ -33,7 +34,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
               alt={listing.title}
               fill
               style={{ objectFit: 'cover' }}
-              sizes="(max-width: 768px) 100vw, 33vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={false}
             />
           </div>
         </Link>

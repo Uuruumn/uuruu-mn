@@ -315,16 +315,49 @@ export default function PostForm() {
     multiple
     accept="image/jpeg,image/png,image/webp"
     style={{ display: 'none' }}
-    onChange={e => {
-      const files = e.target.files;
-      if (files && files.length > 10) {
-        alert('Дээд тал нь 10 зураг сонгоно уу');
-        e.target.value = '';
-        setImageFiles(null);
-        return;
-      }
-      setImageFiles(files);
-    }}
+    onChange={async e => {
+  const files = e.target.files;
+  if (!files || files.length === 0) return;
+  if (files.length > 10) {
+    alert('Дээд тал нь 10 зураг сонгоно уу');
+    e.target.value = '';
+    setImageFiles(null);
+    return;
+  }
+
+  // Canvas APIで圧縮
+  const compressImage = (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      const MAX_SIZE = 1200;
+      const QUALITY = 0.8;
+      const img = document.createElement('img');
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        let w = img.width;
+        let h = img.height;
+        if (w > MAX_SIZE || h > MAX_SIZE) {
+          if (w > h) { h = Math.round(h * MAX_SIZE / w); w = MAX_SIZE; }
+          else { w = Math.round(w * MAX_SIZE / h); h = MAX_SIZE; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+        canvas.toBlob(blob => {
+          resolve(blob ? new File([blob], file.name, { type: 'image/webp' }) : file);
+        }, 'image/webp', QUALITY);
+      };
+      img.src = url;
+    });
+  };
+
+  const compressed = await Promise.all(Array.from(files).map(compressImage));
+  const dt = new DataTransfer();
+  compressed.forEach(f => dt.items.add(f));
+  e.target.files = dt.files;
+  setImageFiles(dt.files);
+}}
   />
   {imageFiles && imageFiles.length > 0 && (
     <p className="small-meta" style={{ marginTop: 8, color: 'green' }}>
