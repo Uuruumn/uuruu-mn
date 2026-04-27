@@ -30,6 +30,7 @@ export default function PostForm() {
   const [priceDisplay, setPriceDisplay] = useState('');
   const [description, setDescription] = useState('');
   const [imageFiles, setImageFiles] = useState<FileList | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isApartment = propertyType === 'apartment';
   const isHouse = propertyType === 'house';
@@ -121,14 +122,16 @@ export default function PostForm() {
 
       {hasCertificate && (
         <form className="form-grid" action={async (formData) => {
-          try {
-            await createListing(formData);
-          } catch (e: any) {
-            if (e?.message === 'NOCERT') {
-              alert('Гэрчилгээгүй үл хөдлөхийн хувьд манай компанитай холбогдоно уу:\nИ-мэйл: sonsooch@gmail.com\nУтас: 80702326');
-            }
-          }
-        }}>
+  setIsSubmitting(true);
+  try {
+    await createListing(formData);
+  } catch (e: any) {
+    setIsSubmitting(false);
+    if (e?.message === 'NOCERT') {
+      alert('Гэрчилгээгүй үл хөдлөхийн хувьд манай компанитай холбогдоно уу:\nИ-мэйл: sonsooch@gmail.com\nУтас: 80702326');
+    }
+  }
+}}>
           <input type="hidden" name="has_certificate" value="true" />
 
           <div className="full-width">
@@ -158,7 +161,6 @@ export default function PostForm() {
           {posterType === 'company' && (
             <>
               <input className="full-width" name="company_name" placeholder="Компанийн нэр" required />
-              <input className="full-width" name="company_register" placeholder="Регистрийн дугаар" />
             </>
           )}
 
@@ -413,9 +415,14 @@ export default function PostForm() {
   </p>
 </div>
 
-          <button className="btn btn-primary btn-block full-width" type="submit">
-            Зар нийтлэх
-          </button>
+          <button
+  className="btn btn-primary btn-block full-width"
+  type="submit"
+  disabled={isSubmitting}
+  style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
+>
+  {isSubmitting ? 'Зар нийтлэгдэж байна...' : 'Зар нийтлэх'}
+</button>
         </form>
       )}
     </div>

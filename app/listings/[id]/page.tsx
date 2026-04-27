@@ -185,9 +185,7 @@ export default async function ListingDetailPage({
                 {listing.company_name && (
                   <InfoItem icon={Building2} label="Компанийн нэр" value={listing.company_name} />
                 )}
-                {listing.company_register && (
-                  <InfoItem icon={Building2} label="Регистрийн дугаар" value={listing.company_register} />
-                )}
+                
               </div>
             </SectionCard>
           )}
