@@ -212,10 +212,15 @@ export default function PostForm() {
 
           {isApartment && (
             <>
-              <input name="area" type="number" step="0.1" placeholder="Талбай — МКВ (м²)" required min="1" />
+              <input name="area" type="number" step="0.01" placeholder="Талбай — МКВ (м²)" required min="1" />
               <input name="rooms" type="number" placeholder="Өрөөний тоо" required min="1" />
               <input name="floor" type="number" placeholder="Давхар" min="0" />
-              <input name="built_year" type="number" placeholder="Ашиглалтад орсон он" min="1900" max="2100" />
+              <select name="built_year" defaultValue="">
+  <option value="">Ашиглалтад орсон он (заавал биш)</option>
+  {Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, i) => new Date().getFullYear() - i).map(year => (
+    <option key={year} value={year}>{year}</option>
+  ))}
+</select>
               <input name="window_count" type="number" placeholder="Нийт цонх (тоо)" min="0" />
 
               <select name="building_material" defaultValue="">
@@ -247,10 +252,15 @@ export default function PostForm() {
 
           {isHouse && (
             <>
-              <input name="land_area" type="number" step="0.1" placeholder="Газрын хэмжээ (м²)" min="1" />
-              <input name="area" type="number" step="0.1" placeholder="Байшингийн хэмжээ (м²) — заавал биш" min="1" />
+              <input name="land_area" type="number" step="0.01" placeholder="Газрын хэмжээ (м²)" min="1" />
+              <input name="area" type="number" step="0.01" placeholder="Байшингийн хэмжээ (м²) — заавал биш" min="1" />
               <input name="rooms" type="number" placeholder="Өрөөний тоо (заавал биш)" min="1" />
-              <input name="built_year" type="number" placeholder="Ашиглалтад орсон он (заавал биш)" min="1900" max="2100" />
+              <select name="built_year" defaultValue="">
+  <option value="">Ашиглалтад орсон он (заавал биш)</option>
+  {Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, i) => new Date().getFullYear() - i).map(year => (
+    <option key={year} value={year}>{year}</option>
+  ))}
+</select>
 
               <select name="heating" defaultValue="">
                 <option value="">Дулаан (заавал биш)</option>
@@ -271,10 +281,28 @@ export default function PostForm() {
 
           {isLand && (
             <>
-              <input name="land_area" type="number" step="0.1" placeholder="Газрын хэмжээ (м²)" required min="1" />
-              <input name="area" type="number" step="0.1" placeholder="Барилгын хэмжээ (м²) — заавал биш" min="1" />
+              <input name="land_area" type="number" step="0.01" placeholder="Газрын хэмжээ (м²)" required min="1" />
+              <input name="area" type="number" step="0.01" placeholder="Барилгын хэмжээ (м²) — заавал биш" min="1" />
             </>
           )}
+
+          {isCommercial && (
+  <>
+    <input name="area" type="number" step="0.01" placeholder="Талбай (м²)" required min="1" />
+    <input name="floor" type="number" placeholder="Давхар (заавал биш)" min="0" />
+    <select name="built_year" defaultValue="">
+  <option value="">Ашиглалтад орсон он (заавал биш)</option>
+  {Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, i) => new Date().getFullYear() - i).map(year => (
+    <option key={year} value={year}>{year}</option>
+  ))}
+</select>
+    <select name="renovation" defaultValue="">
+      <option value="">Засварын байдал (заавал биш)</option>
+      {RENOVATION_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+    </select>
+    <input type="hidden" name="rooms" value="0" />
+  </>
+)}
 
           {(isHouse || isLand) && (
             <input type="hidden" name="rooms" value="0" />

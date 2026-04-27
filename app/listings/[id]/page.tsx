@@ -11,11 +11,41 @@ import {
   FLOOR_TYPES,
   RENOVATION_TYPES,
 } from '@/lib/constants';
+import {
+  MapPin, Banknote, Maximize2, BedDouble, Building2, CalendarDays,
+  Map, Video, Layers, Droplets, Fence, Flame, Grid2x2, Wind, Hammer,
+} from 'lucide-react';
 
 function getLabel(list: readonly { value: string; label: string }[], value: string | null) {
   if (!value) return '';
   return list.find(item => item.value === value)?.label || value;
 }
+
+const InfoItem = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => (
+  <div style={{
+    background: '#f8fafc', borderRadius: 14, padding: '14px 16px',
+    border: '1px solid var(--border)',
+  }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+      <Icon size={14} color="#94a3b8" strokeWidth={2} />
+      <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>{label}</span>
+    </div>
+    <div style={{ fontWeight: 700, fontSize: '0.97rem', color: 'var(--navy)' }}>{value}</div>
+  </div>
+);
+
+const SectionCard = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{
+    background: '#fff', borderRadius: 20, padding: '24px',
+    boxShadow: '0 2px 16px rgba(15,23,42,0.05)', marginBottom: 16,
+    border: '1px solid rgba(15,23,42,0.07)',
+  }}>
+    <h3 style={{ margin: '0 0 16px', fontSize: '0.95rem', fontWeight: 700, color: 'var(--navy)', letterSpacing: '-0.02em' }}>
+      {title}
+    </h3>
+    {children}
+  </div>
+);
 
 export default async function ListingDetailPage({
   params,
@@ -63,245 +93,215 @@ export default async function ListingDetailPage({
     apartment: 'Орон сууц',
     house: 'Хашаа байшин',
     land: 'Газар',
+    commercial: 'Үйлчилгээний талбай',
   };
+
+  const infoItems = [
+    listing.location && { icon: MapPin, label: 'Байршил', value: `${listing.location}${listing.district ? ` — ${listing.district}` : ''}${listing.khoroo ? `, ${listing.khoroo}-р хороо` : ''}` },
+    listing.price && { icon: Banknote, label: 'Үнэ', value: `${formatPrice(Number(listing.price))}${listing.listing_type === 'rent' ? '/сар' : ''}` },
+    listing.area && { icon: Maximize2, label: 'Талбай', value: `${listing.area} м²` },
+    listing.rooms && { icon: BedDouble, label: 'Өрөө', value: `${listing.rooms}` },
+    listing.floor != null && { icon: Building2, label: 'Давхар', value: `${listing.floor}` },
+    listing.built_year && { icon: CalendarDays, label: 'Ашиглалтад орсон он', value: `${listing.built_year}` },
+    listing.land_area && { icon: Maximize2, label: 'Газрын хэмжээ', value: `${listing.land_area} м²` },
+  ].filter(Boolean) as { icon: any; label: string; value: string }[];
+
+  const buildingItems = [
+    listing.building_material && { icon: Layers, label: 'Барилгын материал', value: getLabel(BUILDING_MATERIALS, listing.building_material) },
+    listing.window_type && { icon: Wind, label: 'Цонхны төрөл', value: getLabel(WINDOW_TYPES, listing.window_type) },
+    listing.floor_type && { icon: Grid2x2, label: 'Шалны материал', value: getLabel(FLOOR_TYPES, listing.floor_type) },
+    listing.renovation && { icon: Hammer, label: 'Засварын байдал', value: getLabel(RENOVATION_TYPES, listing.renovation) },
+    listing.window_count != null && { icon: Grid2x2, label: 'Нийт цонх', value: `${listing.window_count}` },
+    listing.balcony && { icon: Building2, label: 'Тагт', value: listing.balcony === 'yes' ? 'Тийм' : 'Үгүй' },
+    listing.heating && { icon: Flame, label: 'Дулаан', value: listing.heating },
+    listing.water && { icon: Droplets, label: 'Ус', value: listing.water },
+    listing.fence && { icon: Fence, label: 'Хашаа', value: listing.fence },
+  ].filter(Boolean) as { icon: any; label: string; value: string }[];
 
   return (
     <main className="page-main detail-layout">
       <div className="container detail-grid">
+        {/* 左カラム */}
         <div>
           <div style={{ position: 'relative' }}>
             <ImageGallery
               images={allImages.length > 0 ? allImages : [fallback]}
               title={listing.title}
             />
-
             <div style={{ position: 'absolute', top: 18, right: 18, zIndex: 5 }}>
               <FavoriteButton listingId={listing.id} />
             </div>
           </div>
 
-          <div className="info-card">
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+          {/* タイトルエリア */}
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
               {listing.listing_type && (
-                <span
-                  style={{
-                    padding: '4px 12px',
-                    borderRadius: 999,
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    background:
-                      listing.listing_type === 'sale'
-                        ? 'rgba(16,185,129,0.12)'
-                        : 'rgba(99,102,241,0.12)',
-                    color: listing.listing_type === 'sale' ? '#10b981' : '#6366f1',
-                  }}
-                >
+                <span style={{
+                  padding: '4px 12px', borderRadius: 999, fontSize: '0.8rem', fontWeight: 700,
+                  background: listing.listing_type === 'sale' ? 'rgba(16,185,129,0.12)' : 'rgba(99,102,241,0.12)',
+                  color: listing.listing_type === 'sale' ? '#10b981' : '#6366f1',
+                }}>
                   {LISTING_TYPE_LABEL[listing.listing_type] ?? listing.listing_type}
                 </span>
               )}
-
               {listing.property_type && (
-                <span
-                  style={{
-                    padding: '4px 12px',
-                    borderRadius: 999,
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    background: 'rgba(148,163,184,0.12)',
-                    color: '#64748b',
-                  }}
-                >
+                <span style={{
+                  padding: '4px 12px', borderRadius: 999, fontSize: '0.8rem', fontWeight: 700,
+                  background: 'rgba(148,163,184,0.12)', color: '#64748b',
+                }}>
                   {PROPERTY_TYPE_LABEL[listing.property_type] ?? listing.property_type}
                 </span>
               )}
             </div>
-
             <div className="section-kicker">Зарын дэлгэрэнгүй</div>
-            <h1 style={{ marginTop: 10 }}>{listing.title}</h1>
-
-            <div className="info-section">
-              <h3>Үндсэн мэдээлэл</h3>
-              <div className="info-list">
-                <div>
-                  <strong>📍 Байршил</strong>
-                  {listing.location}
-                  {listing.district ? ` — ${listing.district}` : ''}
-                  {listing.khoroo ? `, ${listing.khoroo}-р хороо` : ''}
-                </div>
-
-                <div>
-                  <strong>💰 Үнэ</strong>
-                  {formatPrice(Number(listing.price))}
-                  {listing.listing_type === 'rent' ? '/сар' : ''}
-                </div>
-
-                <div>
-                  <strong>📐 Талбай</strong>
-                  {listing.area} м²
-                </div>
-
-                <div>
-                  <strong>🛏 Өрөө</strong>
-                  {listing.rooms}
-                </div>
-
-                {listing.floor != null && (
-                  <div>
-                    <strong>🏢 Давхар</strong>
-                    {listing.floor}
-                  </div>
-                )}
-
-                {listing.built_year && (
-                  <div>
-                    <strong>📅 Ашиглалтад орсон он</strong>
-                    {listing.built_year}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="info-section">
-              <h3>Барилгын мэдээлэл</h3>
-              <div className="info-list">
-                {listing.building_material && (
-                  <div>
-                    <strong>🧱 Барилгын материал</strong>
-                    {getLabel(BUILDING_MATERIALS, listing.building_material)}
-                  </div>
-                )}
-
-                {listing.window_type && (
-                  <div>
-                    <strong>🪟 Цонхны төрөл</strong>
-                    {getLabel(WINDOW_TYPES, listing.window_type)}
-                  </div>
-                )}
-
-                {listing.floor_type && (
-                  <div>
-                    <strong>🪵 Шалны материал</strong>
-                    {getLabel(FLOOR_TYPES, listing.floor_type)}
-                  </div>
-                )}
-
-                {listing.renovation && (
-                  <div>
-                    <strong>🛠 Засварын байдал</strong>
-                    {getLabel(RENOVATION_TYPES, listing.renovation)}
-                  </div>
-                )}
-
-                {listing.window_count != null && (
-                  <div>
-                    <strong>🔲 Нийт цонх</strong>
-                    {listing.window_count}
-                  </div>
-                )}
-
-                {listing.balcony && (
-                  <div>
-                    <strong>🌤 Тагт</strong>
-                    {listing.balcony === 'yes' ? 'Тийм' : 'Үгүй'}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {(listing.company_name || listing.company_register) && (
-              <div className="info-section">
-                <h3>Зар оруулагчийн мэдээлэл</h3>
-                <div className="info-list">
-                  {listing.company_name && (
-                    <div>
-                      <strong>Компанийн нэр</strong>
-                      {listing.company_name}
-                    </div>
-                  )}
-
-                  {listing.company_register && (
-                    <div>
-                      <strong>Регистрийн дугаар</strong>
-                      {listing.company_register}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className="detail-box">
-              <strong>Тайлбар</strong>
-              <p className="small-meta" style={{ marginBottom: 0, marginTop: 8 }}>
-                {listing.description}
-              </p>
-            </div>
-
-            {listing.google_map_url && (
-              <div className="detail-box" style={{ marginTop: 14 }}>
-                <strong>Google Map</strong>
-                <div style={{ marginTop: 8, textAlign: 'center' }}>
-                  <a
-                    href={listing.google_map_url as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary"
-                    style={{ display: 'inline-flex', width: '100%', justifyContent: 'center' }}
-                  >
-                    Google Map харах
-                  </a>
-                </div>
-              </div>
-            )}
-
-            {listing.video_url && (
-              <div className="detail-box" style={{ marginTop: 14 }}>
-                <strong>Видео</strong>
-                <div style={{ marginTop: 8, textAlign: 'center' }}>
-                  <a
-                    href={listing.video_url as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-ghost"
-                    style={{ display: 'inline-flex', width: '100%', justifyContent: 'center' }}
-                  >
-                    Видео үзэх
-                  </a>
-                </div>
-              </div>
-            )}
+            <h1 style={{ marginTop: 8, marginBottom: 0 }}>{listing.title}</h1>
           </div>
+
+          {/* 基本情報 */}
+          <SectionCard title="Үндсэн мэдээлэл">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+              {infoItems.map((item, i) => (
+                <InfoItem key={i} icon={item.icon} label={item.label} value={item.value} />
+              ))}
+            </div>
+          </SectionCard>
+
+          {/* 建物情報 */}
+          {buildingItems.length > 0 && (
+            <SectionCard title="Барилгын мэдээлэл">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+                {buildingItems.map((item, i) => (
+                  <InfoItem key={i} icon={item.icon} label={item.label} value={item.value} />
+                ))}
+              </div>
+            </SectionCard>
+          )}
+
+          {/* 会社情報 */}
+          {(listing.company_name || listing.company_register) && (
+            <SectionCard title="Зар оруулагчийн мэдээлэл">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+                {listing.company_name && (
+                  <InfoItem icon={Building2} label="Компанийн нэр" value={listing.company_name} />
+                )}
+                {listing.company_register && (
+                  <InfoItem icon={Building2} label="Регистрийн дугаар" value={listing.company_register} />
+                )}
+              </div>
+            </SectionCard>
+          )}
+
+          {/* 説明文 */}
+          <SectionCard title="Тайлбар">
+            <p style={{ margin: 0, color: 'var(--muted)', lineHeight: 1.8, fontSize: '0.97rem' }}>
+              {listing.description}
+            </p>
+          </SectionCard>
+
+          {/* Google Map / Video */}
+          {(listing.google_map_url || listing.video_url) && (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: listing.google_map_url && listing.video_url ? '1fr 1fr' : '1fr',
+              gap: 10, marginBottom: 16,
+            }}>
+              {listing.google_map_url && (
+                <a href={listing.google_map_url as string} target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    padding: '14px', borderRadius: 14, background: '#fff',
+                    border: '1px solid var(--border)', fontWeight: 600, fontSize: '0.9rem',
+                    color: 'var(--navy)', transition: 'all 0.2s',
+                  }}
+                >
+                  <Map size={16} /> Google Map харах
+                </a>
+              )}
+              {listing.video_url && (
+                <a href={listing.video_url as string} target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    padding: '14px', borderRadius: 14, background: '#fff',
+                    border: '1px solid var(--border)', fontWeight: 600, fontSize: '0.9rem',
+                    color: 'var(--navy)', transition: 'all 0.2s',
+                  }}
+                >
+                  <Video size={16} /> Видео үзэх
+                </a>
+              )}
+            </div>
+          )}
         </div>
 
+        {/* 右サイドバー */}
         <aside className="contact-card">
-          <div className="status-badge live">Нийтлэгдсэн</div>
-
-          <h2 className="price-big">
-            {formatPrice(Number(listing.price))}
-            {listing.listing_type === 'rent' ? '/сар' : ''}
-          </h2>
-
-          <div className="contact-btn-wrap">
-            <PhoneRevealButton phone={listing.phone} fullWidth />
+          <div style={{ marginBottom: 16 }}>
+            <span style={{
+              display: 'inline-block', padding: '5px 14px', borderRadius: 999,
+              background: 'rgba(16,185,129,0.12)', color: '#10b981',
+              fontSize: '0.82rem', fontWeight: 700,
+            }}>
+              ✓ Нийтлэгдсэн
+            </span>
           </div>
 
-          <div className="quick-info">
-            <div>🛏 {listing.rooms} өрөө</div>
-            <div>📐 {listing.area} м²</div>
-            <div>🏢 {listing.floor ?? '-'} давхар</div>
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--muted)', marginBottom: 4, fontWeight: 500 }}>Үнэ</div>
+            <div style={{ fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.04em', color: 'var(--navy)', lineHeight: 1.1 }}>
+              {formatPrice(Number(listing.price))}
+              {listing.listing_type === 'rent' && (
+                <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--muted)' }}>/сар</span>
+              )}
+            </div>
           </div>
 
-          <div className="detail-box" style={{ marginTop: 14 }}>
-            <strong>Байршил</strong>
-            <div>{listing.location}</div>
+          <PhoneRevealButton phone={listing.phone} fullWidth />
+
+          {/* スペック */}
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8,
+            marginTop: 20, padding: '16px 0',
+            borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
+          }}>
+            {listing.rooms > 0 && (
+              <div style={{ textAlign: 'center' }}>
+                <BedDouble size={18} color="#94a3b8" style={{ margin: '0 auto 4px' }} />
+                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{listing.rooms}</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>өрөө</div>
+              </div>
+            )}
+            {listing.area > 0 && (
+              <div style={{ textAlign: 'center' }}>
+                <Maximize2 size={18} color="#94a3b8" style={{ margin: '0 auto 4px' }} />
+                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{listing.area}</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>м²</div>
+              </div>
+            )}
+            {listing.floor != null && (
+              <div style={{ textAlign: 'center' }}>
+                <Building2 size={18} color="#94a3b8" style={{ margin: '0 auto 4px' }} />
+                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{listing.floor}</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>давхар</div>
+              </div>
+            )}
           </div>
 
-          <div className="detail-box" style={{ marginTop: 14 }}>
-            <strong>Зарын хугацаа дуусах огноо</strong>
-            <div>{formatDate(listing.expires_at)}</div>
+          {/* 掲載期限 */}
+          <div style={{
+            marginTop: 10, padding: '14px 16px', borderRadius: 14,
+            background: '#f8fafc', border: '1px solid var(--border)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+              <CalendarDays size={13} color="#94a3b8" />
+              <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>Зарын хугацаа дуусах огноо</span>
+            </div>
+            <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{formatDate(listing.expires_at)}</div>
           </div>
         </aside>
       </div>
 
+      {/* 関連物件 */}
       {related && related.length > 0 && (
         <div className="container" style={{ marginTop: 60, paddingBottom: 60 }}>
           <div className="section-head" style={{ marginBottom: 24 }}>
@@ -309,11 +309,8 @@ export default async function ListingDetailPage({
               <div className="section-kicker">Төстэй зарууд</div>
               <h2 style={{ margin: '8px 0 0' }}>Танд таалагдаж болох зарууд</h2>
             </div>
-            <a href="/listings" className="text-link">
-              Бүгдийг харах
-            </a>
+            <a href="/listings" className="text-link">Бүгдийг харах</a>
           </div>
-
           <div className="cards-grid">
             {related.map((item: any) => (
               <ListingCard key={item.id} listing={item} />
