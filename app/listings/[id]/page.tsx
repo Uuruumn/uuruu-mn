@@ -28,7 +28,7 @@ const InfoItem = ({ icon: Icon, label, value }: { icon: any; label: string; valu
   }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
       <Icon size={14} color="#94a3b8" strokeWidth={2} />
-      <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>{label}</span>
+      <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</span>
     </div>
     <div style={{ fontWeight: 700, fontSize: '0.97rem', color: 'var(--navy)' }}>{value}</div>
   </div>
