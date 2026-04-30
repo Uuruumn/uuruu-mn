@@ -7,10 +7,12 @@ import Link from 'next/link';
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleReset = async () => {
     if (!email) {
+      setIsError(true);
       setMessage('Имэйл хаягаа оруулна уу');
       return;
     }
@@ -20,12 +22,14 @@ export default function ForgotPasswordPage() {
     const supabase = createClient();
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${location.origin}/reset-password`,
+      redirectTo: `${location.origin}/auth/confirm`,
     });
 
     if (error) {
+      setIsError(true);
       setMessage('Алдаа гарлаа. Дахин оролдоно уу.');
     } else {
+      setIsError(false);
       setMessage('Имэйл илгээгдлээ. Та шалгана уу.');
     }
 
@@ -36,7 +40,6 @@ export default function ForgotPasswordPage() {
     <main className="page-main">
       <div className="container" style={{ maxWidth: 420 }}>
         <div className="content-card" style={{ textAlign: 'center', padding: 28 }}>
-          
           <h1 style={{ marginBottom: 8 }}>Нууц үг сэргээх</h1>
           <p className="small-meta" style={{ marginBottom: 24 }}>
             Имэйл хаягаа оруулж нууц үг сэргээх холбоос авна уу.
@@ -77,7 +80,7 @@ export default function ForgotPasswordPage() {
           </button>
 
           {message && (
-            <p style={{ marginTop: 16, color: 'var(--muted)' }}>
+            <p style={{ marginTop: 16, color: isError ? '#e53e3e' : '#38a169', fontWeight: 600 }}>
               {message}
             </p>
           )}
@@ -87,7 +90,6 @@ export default function ForgotPasswordPage() {
               ← Буцах
             </Link>
           </div>
-
         </div>
       </div>
     </main>

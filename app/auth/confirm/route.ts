@@ -7,14 +7,22 @@ export async function GET(request: Request) {
 
   const token_hash = searchParams.get('token_hash');
   const type = searchParams.get('type') as EmailOtpType | null;
+  const code = searchParams.get('code');
 
+  // パスワードリセット用（PKCE方式）
+  if (code) {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error) {
+      return NextResponse.redirect(`${origin}/reset-password`);
+    }
+  }
+
+  // メール確認用（既存）
   if (token_hash && type) {
     const supabase = await createClient();
-
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
-    });
+    const { error } = await supabase.auth.verifyOtp({ type, token_hash });
 
     if (!error) {
       return NextResponse.redirect(`${origin}/login?message=Имэйл баталгаажлаа`);

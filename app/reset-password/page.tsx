@@ -1,16 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase-client';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [ready, setReady] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setReady(true);
+      } else {
+        setIsError(true);
+        setMessage('Линк хүчингүй байна. Дахин оролдоно уу.');
+      }
+    });
+  }, []);
 
   const handleUpdate = async () => {
     if (password.length < 6) {
+      setIsError(true);
       setMessage('Нууц үг хамгийн багадаа 6 тэмдэгт байх ёстой.');
       return;
     }
@@ -19,14 +36,15 @@ export default function ResetPasswordPage() {
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.updateUser({
-      password,
-    });
+    const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
+      setIsError(true);
       setMessage('Алдаа гарлаа. Дахин оролдоно уу.');
     } else {
+      setIsError(false);
       setMessage('Нууц үг амжилттай шинэчлэгдлээ.');
+      setTimeout(() => router.push('/login'), 2000);
     }
 
     setLoading(false);
@@ -47,6 +65,7 @@ export default function ResetPasswordPage() {
             placeholder="Шинэ нууц үг"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={!ready}
             style={{
               width: '100%',
               height: 48,
@@ -55,12 +74,13 @@ export default function ResetPasswordPage() {
               padding: '0 14px',
               marginBottom: 16,
               fontSize: '0.95rem',
+              opacity: ready ? 1 : 0.5,
             }}
           />
 
           <button
             onClick={handleUpdate}
-            disabled={loading}
+            disabled={loading || !ready}
             style={{
               width: '100%',
               height: 48,
@@ -69,15 +89,16 @@ export default function ResetPasswordPage() {
               background: 'var(--gold)',
               color: '#111',
               fontWeight: 700,
-              cursor: 'pointer',
+              cursor: ready ? 'pointer' : 'not-allowed',
               fontSize: '1rem',
+              opacity: ready ? 1 : 0.5,
             }}
           >
             {loading ? 'Хадгалж байна...' : 'Хадгалах'}
           </button>
 
           {message && (
-            <p style={{ marginTop: 16, color: 'var(--muted)' }}>
+            <p style={{ marginTop: 16, color: isError ? '#e53e3e' : '#38a169', fontWeight: 600 }}>
               {message}
             </p>
           )}
