@@ -10,7 +10,8 @@ export const metadata: Metadata = {
     default: 'Uuruu.mn — Үл хөдлөх хөрөнгийн зарын платформ',
     template: '%s | Uuruu.mn',
   },
-  description: 'Улаанбаатар хотын орон сууц, газар, хашаа байшингийн зар. Түрээс болон худалдааны үл хөдлөх хөрөнгийн мэдээлэл.',
+  description:
+    'Улаанбаатар хотын орон сууц, газар, хашаа байшингийн зар. Түрээс болон худалдааны үл хөдлөх хөрөнгийн мэдээлэл.',
   keywords: ['үл хөдлөх хөрөнгө', 'орон сууц', 'газар зарна', 'түрээс', 'хашаа байшин', 'Улаанбаатар', 'UB', 'зар'],
   openGraph: {
     type: 'website',
@@ -18,15 +19,9 @@ export const metadata: Metadata = {
     url: 'https://uuruu.mn',
     siteName: 'Uuruu.mn',
     title: 'Uuruu.mn — Үл хөдлөх хөрөнгийн зарын платформ',
-    description: 'Улаанбаатар хотын орон сууц, газар, хашаа байшингийн зар. Түрээс болон худалдааны үл хөдлөх хөрөнгийн мэдээлэл.',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Uuruu.mn',
-      },
-    ],
+    description:
+      'Улаанбаатар хотын орон сууц, газар, хашаа байшингийн зар. Түрээс болон худалдааны үл хөдлөх хөрөнгийн мэдээлэл.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Uuruu.mn' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -37,10 +32,7 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
+    googleBot: { index: true, follow: true },
   },
   alternates: {
     canonical: 'https://uuruu.mn',
@@ -70,7 +62,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mongolian&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mongolian&family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

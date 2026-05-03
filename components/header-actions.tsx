@@ -10,22 +10,20 @@ export function HeaderActions({ isLoggedIn }: { isLoggedIn: boolean }) {
   const isPost = pathname === '/post';
   const isDashboard = pathname === '/dashboard';
 
+  const baseStyle = {
+    height: 40,
+    padding: '0 16px',
+    fontSize: '0.9rem',
+  };
+
   if (!isLoggedIn) {
     return (
       <>
-        <Link
-          href="/login?mode=login"
-          className="btn btn-ghost"
-          style={{ height: 40, padding: '0 16px', fontSize: '0.9rem' }}
-        >
+        <Link href="/login?mode=login" className="btn btn-ghost" style={baseStyle}>
           Нэвтрэх
         </Link>
 
-        <Link
-          href="/login?redirect=/post"
-          className="btn btn-primary"
-          style={{ height: 40, padding: '0 16px', fontSize: '0.9rem' }}
-        >
+        <Link href="/login?redirect=/post" className="btn btn-primary" style={baseStyle}>
           Зар оруулах
         </Link>
       </>
@@ -38,9 +36,7 @@ export function HeaderActions({ isLoggedIn }: { isLoggedIn: boolean }) {
         href="/post"
         className="btn btn-ghost"
         style={{
-          height: 40,
-          padding: '0 16px',
-          fontSize: '0.9rem',
+          ...baseStyle,
           background: isPost ? '#0f172a' : 'transparent',
           color: isPost ? 'white' : 'var(--text)',
         }}
@@ -52,9 +48,7 @@ export function HeaderActions({ isLoggedIn }: { isLoggedIn: boolean }) {
         href="/dashboard"
         className="btn btn-ghost"
         style={{
-          height: 40,
-          padding: '0 16px',
-          fontSize: '0.9rem',
+          ...baseStyle,
           background: isDashboard ? '#0f172a' : 'transparent',
           color: isDashboard ? 'white' : 'var(--text)',
         }}
@@ -67,9 +61,7 @@ export function HeaderActions({ isLoggedIn }: { isLoggedIn: boolean }) {
           className="btn btn-ghost"
           type="submit"
           style={{
-            height: 40,
-            padding: '0 16px',
-            fontSize: '0.9rem',
+            ...baseStyle,
             color: 'var(--muted)',
           }}
         >

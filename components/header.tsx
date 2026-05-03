@@ -2,12 +2,13 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase-server';
 import { NavLinks } from './nav-links';
 import { MobileMenu } from './mobile-menu';
-import { signOut } from '@/app/login/actions';
 import { HeaderActions } from './header-actions';
 
 export async function Header() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <header className="site-header">
@@ -40,16 +41,16 @@ export async function Header() {
           <NavLinks />
         </div>
 
-        {/* PC右側ボタン */}
+        {/* PC右ボタン */}
         <div className="desktop-menu" style={{ gap: 10 }}>
-  <HeaderActions isLoggedIn={!!user} />
-</div>
-        {/* スマホ右側 */}
+          <HeaderActions isLoggedIn={!!user} />
+        </div>
+
+        {/* スマホ */}
         <div className="mobile-only">
           <Link
-            href={user ? "/post" : "/login?redirect=/post"}
+            href={user ? '/post' : '/login?redirect=/post'}
             className="btn btn-primary"
-            style={{ height: 38, padding: '0 12px', fontSize: '0.85rem' }}
           >
             Зар оруулах
           </Link>

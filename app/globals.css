@@ -199,3 +199,13 @@ textarea{min-height:150px;padding:14px;resize:vertical}
 .info-section + .detail-box {
   margin-top: 26px;
 }
+
+/* 🔥 ヘッダー専用サイズ（最優先で上書き） */
+.site-header .btn {
+  width: auto !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 0 12px !important;
+  font-size: 0.82rem !important;
+  line-height: 1 !important;
+}
