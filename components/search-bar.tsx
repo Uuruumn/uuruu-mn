@@ -4,7 +4,7 @@ export function SearchBar() {
   return (
     <form className="search-panel mobile-search-panel" action="/listings">
       <div className="search-field">
-        <label htmlFor="s-listing-type">Зарлалын төрөл</label>
+        <label htmlFor="s-listing-type">Зарын төрөл</label>
         <select id="s-listing-type" name="listing_type" defaultValue="">
           <option value="">Бүх төрөл</option>
           {LISTING_TYPES.map(t => (
