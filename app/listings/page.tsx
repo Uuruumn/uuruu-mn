@@ -62,7 +62,7 @@ export default async function ListingsPage({
             <h2 style={{ marginTop: 10, marginBottom: 20 }}>Зар шүүх</h2>
             <form className="compact-form" method="GET">
               <div>
-                <label style={{ display: 'block', marginBottom: 6, fontWeight: 600, fontSize: '0.88rem' }}>Зарлалын төрөл</label>
+                <label style={{ display: 'block', marginBottom: 6, fontWeight: 600, fontSize: '0.88rem' }}>Зарын төрөл</label>
                 <select name="listing_type" defaultValue={listing_type || ''}>
                   <option value="">Бүх төрөл</option>
                   {LISTING_TYPES.map(t => (

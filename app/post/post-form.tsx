@@ -138,7 +138,7 @@ export default function PostForm() {
           <input type="hidden" name="has_certificate" value="true" />
 
           <div className="full-width">
-            <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, fontSize: '0.92rem' }}>Зарлалын төрөл</label>
+            <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, fontSize: '0.92rem' }}>Зарын төрөл</label>
             <div style={{ display: 'flex', gap: 20 }}>
               {LISTING_TYPES.map(t => (
                 <label key={t.value} style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: '0.95rem' }}>
