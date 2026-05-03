@@ -360,7 +360,7 @@ export default function LP() {
           variants={staggerV}
         >
           {[
-            { icon: ShieldCheck, value: 'DAN', label: 'Баталгаажуулалт' },
+            { icon: ShieldCheck, value: 'DAN', label: 'Зөвхөн өөрийн өмч' },
             { icon: Zap, value: 'Хямд үнэ', label: '30 хоногийн турш' },
             { icon: CreditCard, value: 'QPay', label: 'Төлбөрийн систем' },
             { icon: Globe, value: 'Улс даяар', label: 'Хот, аймаг' },
