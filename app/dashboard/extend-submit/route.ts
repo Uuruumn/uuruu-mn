@@ -12,16 +12,22 @@ export async function POST(req: NextRequest) {
 
   const supabase = await createClient();
 
+  // ログインユーザー確認
+const { data: { user } } = await supabase.auth.getUser();
+if (!user) {
+  return NextResponse.redirect(new URL('/login', req.url));
+}
+
   // 現在のexpires_atを取得
   const { data: listing } = await supabase
     .from('listings')
-    .select('expires_at, title, location, price, phone')
+    .select('user_id, expires_at, title, location, price, phone')
     .eq('id', listingId)
     .single();
 
-  if (!listing) {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
-  }
+  if (!listing || listing.user_id !== user.id) {
+  return NextResponse.redirect(new URL('/dashboard', req.url));
+}
 
   // 今日から or 期限切れ日から30日延長
   const base = listing.expires_at && new Date(listing.expires_at) > new Date()

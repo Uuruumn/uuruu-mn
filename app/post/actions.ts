@@ -135,8 +135,8 @@ export async function createListing(formData: FormData) {
   }
 
   if (!hasCertificate) {
-    throw new Error('NOCERT');
-  }
+  redirect('/post?message=Үл хөдлөхийн гэрчилгээтэй байх шаардлагатай');
+}
 
   const imageFiles = (formData.getAll('images') as File[])
     .filter((f) => f && f.size > 0)

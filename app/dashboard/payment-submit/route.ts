@@ -12,6 +12,23 @@ export async function POST(req: NextRequest) {
 
   const supabase = await createClient();
 
+  // ログインユーザー確認
+const { data: { user } } = await supabase.auth.getUser();
+if (!user) {
+  return NextResponse.redirect(new URL('/login', req.url));
+}
+
+// オーナー確認
+const { data: ownerCheck } = await supabase
+  .from('listings')
+  .select('user_id')
+  .eq('id', listingId)
+  .single();
+
+if (!ownerCheck || ownerCheck.user_id !== user.id) {
+  return NextResponse.redirect(new URL('/dashboard', req.url));
+}
+
   // 支払い確認と同時に自動公開
   const now = new Date();
   const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
