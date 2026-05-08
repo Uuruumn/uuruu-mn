@@ -31,6 +31,42 @@ export default function PostForm() {
   const [description, setDescription] = useState('');
   const [imageFiles, setImageFiles] = useState<FileList | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+const [aiPreview, setAiPreview] = useState('');
+const [aiError, setAiError] = useState('');
+
+const generateDescription = async () => {
+  setAiError('');  // ← これを追加
+  const titleEl = document.querySelector<HTMLInputElement>('[name="title"]');
+  // 変更後
+if (!propertyType || !location || !titleEl?.value) {
+    setAiError('Үл хөдлөхийн төрөл, байршил, гарчигаа эхлээд бөглөнэ үү');
+    return;
+}
+  setAiLoading(true);
+  setAiPreview('');
+  try {
+    const res = await fetch('/api/generate-description', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        listingType, propertyType, location,
+        title: titleEl.value,
+        price: priceDisplay.replace(/,/g, ''),
+        area: document.querySelector<HTMLInputElement>('[name="area"]')?.value,
+        rooms: document.querySelector<HTMLInputElement>('[name="rooms"]')?.value,
+        floor: document.querySelector<HTMLInputElement>('[name="floor"]')?.value,
+      }),
+    });
+    const data = await res.json();
+    if (data.error) { setAiError(data.error); return; }
+    setAiPreview(data.description);
+  } catch {
+    setAiError('Алдаа гарлаа. Дахин оролдоно уу.');
+  } finally {
+    setAiLoading(false);
+  }
+};
 
   const isApartment = propertyType === 'apartment';
   const isHouse = propertyType === 'house';
@@ -417,6 +453,75 @@ export default function PostForm() {
 </div>
 
           <div className="full-width">
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+    <label style={{ fontWeight: 600, fontSize: '0.92rem' }}>Тайлбар</label>
+    <button
+      type="button"
+      onClick={generateDescription}
+      disabled={aiLoading}
+      style={{
+        background: aiLoading ? '#94a3b8' : 'linear-gradient(135deg, #c9a227, #f0c040)',
+        color: '#0f172a',
+        fontWeight: 700,
+        padding: '6px 14px',
+        borderRadius: 8,
+        border: 'none',
+        cursor: aiLoading ? 'not-allowed' : 'pointer',
+        fontSize: '0.85rem',
+      }}
+    >
+      {aiLoading ? 'Үүсгэж байна...' : '✨ AI-аар тайлбар үүсгэх'}
+    </button>
+  </div>
+
+{aiError && (
+    <div style={{
+        background: '#fef2f2',
+        border: '1px solid #fca5a5',
+        borderRadius: 8,
+        padding: '10px 14px',
+        marginBottom: 12,
+        fontSize: '0.85rem',
+        color: '#b91c1c',
+    }}>
+        ⚠️ {aiError}
+    </div>
+)}
+
+  {aiPreview && (
+    <div style={{
+      background: '#fffbeb',
+      border: '1px solid #f59e0b',
+      borderRadius: 12,
+      padding: '14px 16px',
+      marginBottom: 12,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+        <span>⚠️</span>
+        <strong style={{ fontSize: '0.85rem', color: '#b45309' }}>
+          AI үүсгэсэн текст. Нийтлэхийн өмнө шалгаж, засварлана уу.
+        </strong>
+      </div>
+      <p style={{ margin: '0 0 12px', fontSize: '0.9rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{aiPreview}</p>
+      <button
+        type="button"
+        onClick={() => { setDescription(aiPreview); setAiPreview(''); }}
+        style={{
+          background: '#c9a227',
+          color: '#0f172a',
+          fontWeight: 700,
+          padding: '8px 16px',
+          borderRadius: 8,
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '0.85rem',
+        }}
+      >
+        ✓ Энэ текстийг ашиглах
+      </button>
+    </div>
+  )}
+
   <textarea
     className="full-width"
     name="description"
@@ -425,9 +530,9 @@ export default function PostForm() {
     maxLength={1000}
     value={description}
     onChange={e => {
-    const clean = e.target.value.replace(/[^a-zA-Z0-9\u0400-\u04FF .,₮-]/g, '');
-    setDescription(clean);
-  }}
+      const clean = e.target.value.replace(/[^a-zA-Z0-9\u0400-\u04FF .,₮-]/g, '');
+      setDescription(clean);
+    }}
     style={{ resize: 'vertical', minHeight: 120 }}
   />
   <p className="small-meta" style={{ marginTop: 4, textAlign: 'right' }}>
