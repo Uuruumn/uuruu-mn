@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { headers } from 'next/headers';
+import ChatWidget from '@/components/chat-widget';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://uuruu.mn'),
@@ -75,6 +76,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {!isManage && <Header />}
         {children}
         {!isManage && <Footer />}
+        <ChatWidget />
       </body>
     </html>
   );

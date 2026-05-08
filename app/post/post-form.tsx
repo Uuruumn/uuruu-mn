@@ -32,25 +32,49 @@ export default function PostForm() {
   const [imageFiles, setImageFiles] = useState<FileList | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
-const [aiPreview, setAiPreview] = useState('');
-const [aiError, setAiError] = useState('');
+  const [aiPreview, setAiPreview] = useState('');
+  const [aiError, setAiError] = useState('');
+  const [aiChecked, setAiChecked] = useState(false);
+  const [videoUrlError, setVideoUrlError] = useState('');
+
+const isAllowedYouTubeUrl = (value: string) => {
+  if (!value.trim()) return true;
+
+  try {
+    const url = new URL(value.trim());
+    const hostname = url.hostname.replace(/^www\./, '');
+
+    return (
+      url.protocol === 'https:' &&
+      (hostname === 'youtube.com' || hostname === 'youtu.be')
+    );
+  } catch {
+    return false;
+  }
+};
 
 const generateDescription = async () => {
-  setAiError('');  // ← これを追加
-  const titleEl = document.querySelector<HTMLInputElement>('[name="title"]');
-  // 変更後
-if (!propertyType || !location || !titleEl?.value) {
-    setAiError('Үл хөдлөхийн төрөл, байршил, гарчигаа эхлээд бөглөнэ үү');
-    return;
-}
-  setAiLoading(true);
+  setAiError('');
   setAiPreview('');
+  setAiChecked(false);
+
+  const titleEl = document.querySelector<HTMLInputElement>('[name="title"]');
+
+  if (!propertyType || !location || !titleEl?.value) {
+    setAiError('Үл хөдлөхийн төрөл, байршил болон зарын гарчгийг бөглөнө үү.');
+    return;
+  }
+
+  setAiLoading(true);
+
   try {
     const res = await fetch('/api/generate-description', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        listingType, propertyType, location,
+        listingType,
+        propertyType,
+        location,
         title: titleEl.value,
         price: priceDisplay.replace(/,/g, ''),
         area: document.querySelector<HTMLInputElement>('[name="area"]')?.value,
@@ -58,11 +82,17 @@ if (!propertyType || !location || !titleEl?.value) {
         floor: document.querySelector<HTMLInputElement>('[name="floor"]')?.value,
       }),
     });
+
     const data = await res.json();
-    if (data.error) { setAiError(data.error); return; }
+
+    if (data.error) {
+      setAiError(data.error);
+      return;
+    }
+
     setAiPreview(data.description);
   } catch {
-    setAiError('Алдаа гарлаа. Дахин оролдоно уу.');
+    setAiError('AI тайлбар үүсгэхэд алдаа гарлаа. Дахин оролдоно уу.');
   } finally {
     setAiLoading(false);
   }
@@ -159,18 +189,39 @@ if (!propertyType || !location || !titleEl?.value) {
       {hasCertificate && (
         <form className="form-grid" onSubmit={async (e) => {
   e.preventDefault();
+
   if (isSubmitting) return;
+
   setIsSubmitting(true);
+
   const formData = new FormData(e.currentTarget);
+
+  const videoUrl = String(formData.get('video_url') || '');
+
+  if (!isAllowedYouTubeUrl(videoUrl)) {
+  setIsSubmitting(false);
+
+  setVideoUrlError('Зөвхөн YouTube видео холбоос оруулна уу.');
+
+  return;
+}
+
+setVideoUrlError('');
+
   try {
     await createListing(formData);
+
   } catch (err: any) {
     setIsSubmitting(false);
+
     if (err?.message === 'NOCERT') {
-      alert('Гэрчилгээгүй үл хөдлөхийн хувьд манай компанитай холбогдоно уу:\nИ-мэйл: sonsooch@gmail.com\nУтас: 80702326');
+      alert(
+        'Гэрчилгээгүй үл хөдлөхийн хувьд манай компанитай холбогдоно уу:\nИ-мэйл: sonsooch@gmail.com\nУтас: 80702326'
+      );
     }
   }
-}}>
+}}
+>
           <input type="hidden" name="has_certificate" value="true" />
 
           <div className="full-width">
@@ -369,9 +420,28 @@ if (!propertyType || !location || !titleEl?.value) {
 />
           <div className="full-width">
   <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, fontSize: '0.92rem' }}>
-    YouTube / Facebook зэрэг видео холбоос (заавал биш)
+    YouTube видео холбоос (заавал биш)
   </label>
-  <input className="full-width" name="video_url" type="url" placeholder="URL оруулна уу" />
+  <input
+  className="full-width"
+  name="video_url"
+  type="url"
+  placeholder="URL оруулна уу"
+/>
+
+{videoUrlError && (
+  <p
+    style={{
+      color: '#dc2626',
+      fontSize: '0.82rem',
+      marginTop: 6,
+      marginBottom: 0,
+    }}
+  >
+    ⚠ {videoUrlError}
+  </p>
+)}
+
 </div>
 
           <div className="full-width">
@@ -489,38 +559,105 @@ if (!propertyType || !location || !titleEl?.value) {
 )}
 
   {aiPreview && (
-    <div style={{
+  <div
+    style={{
       background: '#fffbeb',
       border: '1px solid #f59e0b',
       borderRadius: 12,
       padding: '14px 16px',
       marginBottom: 12,
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-        <span>⚠️</span>
-        <strong style={{ fontSize: '0.85rem', color: '#b45309' }}>
-          AI үүсгэсэн текст. Нийтлэхийн өмнө шалгаж, засварлана уу.
-        </strong>
-      </div>
-      <p style={{ margin: '0 0 12px', fontSize: '0.9rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{aiPreview}</p>
-      <button
-        type="button"
-        onClick={() => { setDescription(aiPreview); setAiPreview(''); }}
+    }}
+  >
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        marginBottom: 8,
+      }}
+    >
+      <span>⚠️</span>
+
+      <strong
         style={{
-          background: '#c9a227',
-          color: '#0f172a',
-          fontWeight: 700,
-          padding: '8px 16px',
-          borderRadius: 8,
-          border: 'none',
-          cursor: 'pointer',
           fontSize: '0.85rem',
+          color: '#b45309',
         }}
       >
-        ✓ Энэ текстийг ашиглах
-      </button>
+        AI-аар үүсгэсэн тайлбар тул нийтлэхийн өмнө шалгаж, шаардлагатай бол засварлана уу.
+      </strong>
     </div>
-  )}
+
+    <p
+      style={{
+        margin: '0 0 14px',
+        fontSize: '0.9rem',
+        lineHeight: 1.7,
+        whiteSpace: 'pre-wrap',
+      }}
+    >
+      {aiPreview}
+    </p>
+
+    <label
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 14,
+        fontSize: '0.9rem',
+        cursor: 'pointer',
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={aiChecked}
+        onChange={(e) => setAiChecked(e.target.checked)}
+        style={{
+          width: 16,
+          height: 16,
+          accentColor: 'var(--gold)',
+        }}
+      />
+
+      AI тайлбарыг шалгасан
+    </label>
+
+    <button
+      type="button"
+      disabled={!aiChecked}
+      onClick={() => {
+        setDescription((prev) =>
+          prev.trim()
+            ? prev + '\n\n' + aiPreview
+            : aiPreview
+        );
+
+        setAiPreview('');
+        setAiChecked(false);
+      }}
+      style={{
+        background: aiChecked
+          ? '#c9a227'
+          : '#cbd5e1',
+
+        color: '#0f172a',
+        fontWeight: 700,
+        padding: '8px 16px',
+        borderRadius: 8,
+        border: 'none',
+        cursor: aiChecked
+          ? 'pointer'
+          : 'not-allowed',
+
+        fontSize: '0.85rem',
+        transition: '0.2s',
+      }}
+    >
+      ✓ Тайлбарт оруулах
+    </button>
+  </div>
+)}
 
   <textarea
     className="full-width"
@@ -535,6 +672,9 @@ if (!propertyType || !location || !titleEl?.value) {
     }}
     style={{ resize: 'vertical', minHeight: 120 }}
   />
+  <p className="small-meta" style={{ marginTop: 6 }}>
+  AI-аар үүсгэсэн тайлбарыг өөрчлөх болон нэмэлт мэдээлэл оруулах боломжтой.
+</p>
   <p className="small-meta" style={{ marginTop: 4, textAlign: 'right' }}>
     {description.length} / 1000
   </p>

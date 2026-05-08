@@ -209,3 +209,254 @@ textarea{min-height:150px;padding:14px;resize:vertical}
   font-size: 0.82rem !important;
   line-height: 1 !important;
 }
+
+/* Chat Widget */
+.chatWidget {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9999;
+}
+
+.chatPanel {
+  position: fixed;
+  right: 24px;
+  bottom: 96px;
+  width: 380px;
+  max-height: 70vh;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 26px;
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatHeader {
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #0f172a, #1e3a5f);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chatLogo {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f0c040, #c9a227);
+  color: #0f172a;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: -0.05em;
+  box-shadow:
+    0 8px 20px rgba(201,162,39,.24),
+    inset 0 1px 0 rgba(255,255,255,.35);
+}
+
+.chatTitle {
+  color: #fff;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.chatSubtitle {
+  color: rgba(226,232,240,.7);
+  font-size: .78rem;
+  margin-top: 2px;
+}
+
+.chatClose {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.chatMessages {
+  padding: 16px;
+  max-height: 210px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #f8fafc, #ffffff);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chatRow {
+  display: flex;
+}
+
+.chatRowUser {
+  justify-content: flex-end;
+}
+
+.chatRowBot {
+  justify-content: flex-start;
+}
+
+.chatBubble {
+  max-width: 84%;
+  padding: 11px 14px;
+  border-radius: 18px;
+  font-size: .88rem;
+  line-height: 1.55;
+}
+
+.chatBubbleBot {
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #e5e7eb;
+  border-bottom-left-radius: 6px;
+}
+
+.chatBubbleUser {
+  background: #0f172a;
+  color: #fff;
+  font-weight: 600;
+  border-bottom-right-radius: 6px;
+}
+
+.chatFaqArea {
+  padding: 14px 16px 16px;
+  background: #fff;
+  border-top: 1px solid #eef2f7;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 330px;
+  overflow-y: auto;
+}
+
+.chatHint {
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.chatFaqButton,
+.chatMoreButton {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #0f172a;
+  padding: 12px 14px;
+  border-radius: 15px;
+  font-size: .86rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: .18s ease;
+}
+
+.chatFaqButton:hover,
+.chatMoreButton:hover {
+  border-color: rgba(201,162,39,.6);
+  background: #fffaf0;
+  transform: translateY(-1px);
+}
+
+.chatArrow {
+  color: #c9a227;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.chatResetButton {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: .76rem;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.chatToggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(201,162,39,.45);
+  background: linear-gradient(135deg, #f0c040, #c9a227);
+  color: #0f172a;
+  cursor: pointer;
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.16),
+    0 4px 14px rgba(201,162,39,.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .2s ease;
+}
+
+.chatToggle:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 34px rgba(15, 23, 42, 0.16),
+    0 5px 16px rgba(201,162,39,.16);
+}
+
+.chatToggleIcon {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  color: #0f172a;
+}
+
+@media (max-width: 640px) {
+  .chatWidget {
+    right: 16px;
+    bottom: 18px;
+  }
+
+  .chatPanel {
+    left: 18px;
+    right: 18px;
+    bottom: 88px;
+    width: auto;
+    max-height: 68vh;
+    border-radius: 24px;
+  }
+
+  .chatHeader {
+    position: sticky;
+top: 0;
+z-index: 2;
+  }
+
+  .chatMessages {
+    max-height: 170px;
+  }
+
+  .chatFaqArea {
+    max-height: 38vh;
+    padding: 14px;
+  }
+
+  .chatFaqButton,
+  .chatMoreButton {
+    padding: 11px 12px;
+    font-size: .9rem;
+  }
+
+}
