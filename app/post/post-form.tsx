@@ -697,7 +697,7 @@ setVideoUrlError('');
         transition: '0.2s',
       }}
     >
-      ✓ Тайлбарт оруулах
+      ✓ Тайлбар оруулах
     </button>
   </div>
 )}
@@ -705,7 +705,7 @@ setVideoUrlError('');
   <textarea
     className="full-width"
     name="description"
-    placeholder="Тайлбар"
+    placeholder="Тайлбар оруулах"
     required
     maxLength={1000}
     value={description}
@@ -720,7 +720,7 @@ setVideoUrlError('');
   fontSize: '0.82rem',
   color: '#92400e',
 }}>
-  💡 Үүсгэсэн тайлбарыг өөрчлөх болон нэмэлт мэдээлэл оруулах боломжтой.
+  💡 Автоматаар үүсгэсэн тайлбарыг өөрчлөх болон нэмэлт мэдээлэл оруулах боломжтой.
 </p>
   <p className="small-meta" style={{ marginTop: 4, textAlign: 'right' }}>
     {description.length} / 1000
