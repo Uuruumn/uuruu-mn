@@ -643,28 +643,38 @@ setVideoUrlError('');
     </p>
 
     <label
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        marginBottom: 14,
-        fontSize: '0.9rem',
-        cursor: 'pointer',
-      }}
-    >
-      <input
-        type="checkbox"
-        checked={aiChecked}
-        onChange={(e) => setAiChecked(e.target.checked)}
-        style={{
-          width: 16,
-          height: 16,
-          accentColor: 'var(--gold)',
-        }}
-      />
-
-      Тайлбарыг шалгасан
-    </label>
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 14,
+    fontSize: '0.9rem',
+    cursor: 'pointer',
+  }}
+>
+  <div
+    onClick={() => setAiChecked(v => !v)}
+    style={{
+      width: 20,
+      height: 20,
+      borderRadius: 6,
+      border: `2px solid ${aiChecked ? '#c9a227' : '#cbd5e1'}`,
+      background: aiChecked ? '#c9a227' : '#fff',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
+      transition: '0.2s',
+    }}
+  >
+    {aiChecked && (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M2 6l3 3 5-5" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )}
+  </div>
+  Тайлбарыг шалгасан
+</label>
 
     <button
       type="button"

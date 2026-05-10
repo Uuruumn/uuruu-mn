@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
   const typeLabel =
     propertyType === 'apartment' ? 'орон сууц' :
-    propertyType === 'house' ? 'байшин' :
+    propertyType === 'house' ? 'хашаа байшин' :
     propertyType === 'land' ? 'газар' :
     propertyType === 'commercial' ? 'арилжааны талбай' :
     propertyType;
