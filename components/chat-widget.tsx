@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 const faqs = [
   { q: 'Uuruu.mn ямар үйлчилгээ вэ?', a: 'Uuruu.mn нь үл хөдлөх хөрөнгийн зар нийтлэх платформ бөгөөд өмчлөгч болон худалдан авагч, түрээслэгч нарыг шууд холбох зорилготой үйлчилгээ юм.' },
   { q: 'Uuruu.mn зуучлал хийдэг үү?', a: 'Үгүй. Uuruu.mn нь үл хөдлөх хөрөнгийн зар нийтлэх платформ бөгөөд хэрэглэгчид хоорондоо шууд холбогдон харилцана.' },
-  { q: 'Зар хэрхэн оруулах вэ?', a: 'Нэвтэрсний дараа “Зар оруулах” хэсэгт орж шаардлагатай мэдээллээ бөглөн зар нийтлэх боломжтой.' },
+  { q: 'Зар хэрхэн оруулах вэ?', a: 'Нэвтэрсний дараа "Зар оруулах" хэсэгт орж шаардлагатай мэдээллээ бөглөн зар нийтлэх боломжтой.' },
   { q: 'Зар оруулах төлбөр хэд вэ?', a: 'Нэг зар байршуулах үнэ 25,000₮ байна.' },
   { q: 'Зар хэдэн хоног идэвхтэй байх вэ?', a: 'Зар нь 30 хоногийн хугацаанд идэвхтэй харагдана. Хугацаа дууссаны дараа автоматаар нуугдах бөгөөд дахин төлбөр төлснөөр сэргээх боломжтой.' },
   { q: 'Ямар төлбөрийн хэрэгсэл ашиглах вэ?', a: 'Одоогоор зөвхөн QPay ашиглан төлбөр төлөх боломжтой.' },
@@ -45,17 +45,26 @@ export default function ChatWidget() {
   return (
     <div className="chatWidget">
       {open && (
-        <div className="chatPanel">
+        <div
+          onClick={() => setOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 999,
+          }}
+        />
+      )}
+
+      {open && (
+        <div className="chatPanel" style={{ zIndex: 1000 }}>
           <div className="chatHeader">
-
             <div className="chatBrand">
-  <div className="chatLogo">U</div>
-  <div>
-    <div className="chatTitle">Тусламж</div>
-    <div className="chatSubtitle">Түгээмэл асуултууд</div>
-  </div>
-</div>
-
+              <div className="chatLogo">U</div>
+              <div>
+                <div className="chatTitle">Тусламж</div>
+                <div className="chatSubtitle">Түгээмэл асуултууд</div>
+              </div>
+            </div>
             <button type="button" className="chatClose" onClick={() => setOpen(false)}>
               ×
             </button>
@@ -88,7 +97,6 @@ export default function ChatWidget() {
                 Бусад асуулт харах
               </button>
             )}
-
             <button type="button" className="chatResetButton" onClick={handleReset}>
               Эхлэлд буцах
             </button>
@@ -97,10 +105,10 @@ export default function ChatWidget() {
       )}
 
       {!open && (
-  <button type="button" className="chatToggle" onClick={() => setOpen(true)} aria-label="Uuruu.mn тусламж">
-    <span className="chatToggleIcon">U</span>
-  </button>
-)}
+        <button type="button" className="chatToggle" onClick={() => setOpen(true)} aria-label="Uuruu.mn тусламж">
+          <span className="chatToggleIcon">U</span>
+        </button>
+      )}
     </div>
   );
 }
