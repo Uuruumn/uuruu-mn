@@ -17,6 +17,7 @@ import {
   FLOOR_TYPES,
   RENOVATION_TYPES,
   YES_NO,
+  PRICE_TYPES,
 } from '@/lib/constants';
 import { createListing } from './actions';
 
@@ -60,6 +61,11 @@ const generateDescription = async () => {
 
   const titleEl = document.querySelector<HTMLInputElement>('[name="title"]');
 
+  const getSelectedLabel = (name: string) => {
+    const select = document.querySelector<HTMLSelectElement>(`[name="${name}"]`);
+    return select?.selectedOptions?.[0]?.text || '';
+  };
+
   if (!propertyType || !location || !titleEl?.value) {
     setAiError('Үл хөдлөхийн төрөл, байршил болон зарын гарчгийг бөглөнө үү.');
     return;
@@ -73,17 +79,47 @@ const generateDescription = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         listingType,
-        propertyType,
+        propertyType: propertyType,  // stateのvalueをそのまま送る
+        commercialSubtype: getSelectedLabel('commercial_subtype'),
         location,
+
         title: titleEl.value,
+
         price: priceDisplay.replace(/,/g, ''),
-        area: document.querySelector<HTMLInputElement>('[name="area"]')?.value,
-        rooms: document.querySelector<HTMLInputElement>('[name="rooms"]')?.value,
-        floor: document.querySelector<HTMLInputElement>('[name="floor"]')?.value,
+        priceType:
+          document.querySelector<HTMLSelectElement>('[name="price_type"]')?.value,
+
+        area:
+          document.querySelector<HTMLInputElement>('[name="area"]')?.value,
+
+        landArea:
+          document.querySelector<HTMLInputElement>('[name="land_area"]')?.value,
+
+        rooms:
+          document.querySelector<HTMLInputElement>('[name="rooms"]')?.value,
+
+        floor:
+          document.querySelector<HTMLInputElement>('[name="floor"]')?.value,
+
+        builtYear:
+          document.querySelector<HTMLSelectElement>('[name="built_year"]')?.value,
+
+        windowCount:
+          document.querySelector<HTMLInputElement>('[name="window_count"]')?.value,
+
+        buildingMaterial: getSelectedLabel('building_material'),
+        windowType: getSelectedLabel('window_type'),
+        floorType: getSelectedLabel('floor_type'),
+        renovation: getSelectedLabel('renovation'),
+        balcony: getSelectedLabel('balcony'),
+        heating: getSelectedLabel('heating'),
+        water: getSelectedLabel('water'),
+        fence: getSelectedLabel('fence'),
       }),
     });
 
     const data = await res.json();
+    console.log('AI RESULT:', data);
 
     if (data.error) {
       setAiError(data.error);
@@ -92,7 +128,7 @@ const generateDescription = async () => {
 
     setAiPreview(data.description);
   } catch {
-    setAiError('AI тайлбар үүсгэхэд алдаа гарлаа. Дахин оролдоно уу.');
+    setAiError('Тайлбар үүсгэхэд алдаа гарлаа. Дахин оролдоно уу.');
   } finally {
     setAiLoading(false);
   }
@@ -300,6 +336,13 @@ setVideoUrlError('');
           )}
 
           <input name="google_map_url" type="url" placeholder="Google Map URL оруулна уу" />
+          <select name="price_type" defaultValue="total">
+  {PRICE_TYPES.map(t => (
+    <option key={t.value} value={t.value}>
+      {t.label}
+    </option>
+  ))}
+</select>
           <input type="hidden" name="price" value={priceDisplay.replace(/,/g, '')} />
           <input
   type="text"
@@ -540,7 +583,7 @@ setVideoUrlError('');
         fontSize: '0.85rem',
       }}
     >
-      {aiLoading ? 'Үүсгэж байна...' : '✨ AI-аар тайлбар үүсгэх'}
+      {aiLoading ? 'Үүсгэж байна...' : '✨ Тайлбар автоматаар үүсгэх'}
     </button>
   </div>
 
@@ -584,7 +627,7 @@ setVideoUrlError('');
           color: '#b45309',
         }}
       >
-        AI-аар үүсгэсэн тайлбар тул нийтлэхийн өмнө шалгаж, шаардлагатай бол засварлана уу.
+        Автоматаар үүсгэсэн тайлбар тул нийтлэхийн өмнө шалгаж, шаардлагатай бол засварлана уу.
       </strong>
     </div>
 
@@ -620,7 +663,7 @@ setVideoUrlError('');
         }}
       />
 
-      AI тайлбарыг шалгасан
+      Тайлбарыг шалгасан
     </label>
 
     <button
@@ -672,8 +715,12 @@ setVideoUrlError('');
     }}
     style={{ resize: 'vertical', minHeight: 120 }}
   />
-  <p className="small-meta" style={{ marginTop: 6 }}>
-  AI-аар үүсгэсэн тайлбарыг өөрчлөх болон нэмэлт мэдээлэл оруулах боломжтой.
+  <p style={{
+  marginTop: 8,
+  fontSize: '0.82rem',
+  color: '#92400e',
+}}>
+  💡 Үүсгэсэн тайлбарыг өөрчлөх болон нэмэлт мэдээлэл оруулах боломжтой.
 </p>
   <p className="small-meta" style={{ marginTop: 4, textAlign: 'right' }}>
     {description.length} / 1000

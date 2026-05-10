@@ -101,3 +101,9 @@ export const YES_NO = [
   { value: 'yes', label: 'Тийм' },
   { value: 'no', label: 'Үгүй' },
 ] as const;
+
+export const PRICE_TYPES = [
+  { value: 'total', label: 'Нийт үнэ' },
+  { value: 'per_m2', label: '1 м² үнэ' },
+  { value: 'monthly', label: 'Сарын түрээс' },
+] as const;
